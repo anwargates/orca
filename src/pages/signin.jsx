@@ -6,7 +6,7 @@ import HorizontalLine from '../assets/line.svg'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider } from '../config/firebase'
+import { auth, googleProvider, facebookProvider } from '../config/firebase'
 import BeatLoader from 'react-spinners/BeatLoader'
 
 export const SignIn = () => {
@@ -40,11 +40,29 @@ export const SignIn = () => {
   }
 
   const handleGoogleSignIn = () => {
-    signInWithPopup(auth, googleProvider).then((user) => {
-      console.log(user)
-      setPending(false)
-      navigate('/')
-    })
+    signInWithPopup(auth, googleProvider)
+      .then((user) => {
+        console.log(user)
+        setPending(false)
+        navigate('/')
+      })
+      .catch((e) => {
+        console.log(e)
+        alert(e)
+      })
+  }
+
+  const handleFacebookSignIn = () => {
+    signInWithPopup(auth, facebookProvider)
+      .then((user) => {
+        console.log(user)
+        setPending(false)
+        navigate('/')
+      })
+      .catch((e) => {
+        console.log(e)
+        alert(e)
+      })
   }
 
   console.log(errors)
@@ -87,15 +105,15 @@ export const SignIn = () => {
               />
               <span>Sign in with Google</span>
             </button>
-            <a href=''>
-              <button className='socmed-button'>
-                <img
-                  className='object-cover'
-                  src={FacebookLogo}
-                />
-                <span>Sign in with Facebook</span>
-              </button>
-            </a>
+            <button
+              onClick={handleFacebookSignIn}
+              className='socmed-button'>
+              <img
+                className='object-cover'
+                src={FacebookLogo}
+              />
+              <span>Sign in with Facebook</span>
+            </button>
           </div>
           <div className='flex flex-row gap-6'>
             <img

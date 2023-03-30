@@ -5,7 +5,7 @@ import FacebookLogo from '../assets/facebook-logo.svg'
 import HorizontalLine from '../assets/line.svg'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { auth, googleProvider } from '../config/firebase'
+import { auth, facebookProvider, googleProvider } from '../config/firebase'
 import {
   createUserWithEmailAndPassword,
   updateProfile,
@@ -57,11 +57,29 @@ export const SignUp = () => {
   console.log(errors)
 
   const handleGoogleSignIn = () => {
-    signInWithPopup(auth, googleProvider).then((user) => {
-      console.log(user)
-      setPending(false)
-      navigate('/')
-    })
+    signInWithPopup(auth, googleProvider)
+      .then((user) => {
+        console.log(user)
+        setPending(false)
+        navigate('/')
+      })
+      .catch((e) => {
+        console.log(e)
+        alert(e)
+      })
+  }
+
+  const handleFacebookSignIn = () => {
+    signInWithPopup(auth, facebookProvider)
+      .then((user) => {
+        console.log(user)
+        setPending(false)
+        navigate('/')
+      })
+      .catch((e) => {
+        console.log(e)
+        alert(e)
+      })
   }
 
   return (
@@ -93,24 +111,24 @@ export const SignUp = () => {
             </h3>
           </div>
           <div className='flex flex-row gap-8'>
-            <button 
-            onClick={handleGoogleSignIn}
-            className='socmed-button'>
+            <button
+              onClick={handleGoogleSignIn}
+              className='socmed-button'>
               <img
                 className='object-cover'
                 src={GoogleLogo}
               />
               <span>Sign up with Google</span>
             </button>
-            <a href=''>
-              <button className='socmed-button'>
-                <img
-                  className='object-cover'
-                  src={FacebookLogo}
-                />
-                <span>Sign up with Facebook</span>
-              </button>
-            </a>
+            <button
+              onClick={handleFacebookSignIn}
+              className='socmed-button'>
+              <img
+                className='object-cover'
+                src={FacebookLogo}
+              />
+              <span>Sign up with Facebook</span>
+            </button>
           </div>
           <div className='flex flex-row gap-6'>
             <img

@@ -55,40 +55,20 @@ export const Header = () => {
           </Link>
           <div className='text-white'>
             <ul className='hidden lg:flex gap-8 justify-between'>
-              <li>
-                <Link
-                  className='header-link-button'
-                  to='/'>
-                  Home
-                </Link>
+              <li className='header-link-button'>
+                <Link className='hover:text-gray-200' to='/'>Home</Link>
               </li>
-              <li>
-                <Link
-                  className='header-link-button'
-                  to='/gabung'>
-                  About
-                </Link>
+              <li className='header-link-button'>
+                <Link className='hover:text-gray-200' to='/gabung'>About</Link>
               </li>
-              <li>
-                <Link
-                  className='header-link-button'
-                  to='/tentang'>
-                  Products
-                </Link>
+              <li className='header-link-button'>
+                <Link className='hover:text-gray-200' to='/tentang'>Products</Link>
               </li>
-              <li>
-                <Link
-                  className='header-link-button'
-                  to='/tentang'>
-                  Pricing
-                </Link>
+              <li className='header-link-button'>
+                <Link className='hover:text-gray-200' to='/tentang'>Pricing</Link>
               </li>
-              <li>
-                <Link
-                  className='header-link-button'
-                  to='/tentang'>
-                  How It Works
-                </Link>
+              <li className='header-link-button'>
+                <Link className='hover:text-gray-200' to='/tentang'>How It Works</Link>
               </li>
             </ul>
           </div>
