@@ -33,7 +33,7 @@ export default class HomeSlider extends Component {
               <h1 className='text-white font-bold text-2xl tracking-widest mb-8'>
                 MAKE EVERY PRECIOUS MOMENT COUNT
               </h1>
-              <Link to=''>
+              <Link to='/gallery'>
                 <button className='border-4 text-2xl border-white text-white rounded-[56px] p-5 w-56 font-bold'>
                   Find More
                 </button>

@@ -15,7 +15,7 @@ module.exports = {
         blueSecondary: '#68B0D1',
       },
       backgroundImage: {
-        banner: 'url("src/assets/home/banner.png")',
+        banner: 'url("/src/assets/home/banner.png")',
       },
     },
   },

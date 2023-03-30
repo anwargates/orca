@@ -1,18 +1,52 @@
-import React from 'react'
+import React, { useState } from 'react'
 import LogoOrca from '../assets/logo-orca.svg'
 import GoogleLogo from '../assets/google-logo.svg'
 import FacebookLogo from '../assets/facebook-logo.svg'
 import HorizontalLine from '../assets/line.svg'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '../config/firebase'
+import BeatLoader from 'react-spinners/BeatLoader'
 
 export const SignIn = () => {
+  const navigate = useNavigate()
+  const [pending, setPending] = useState(false)
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const onSubmit = (data) => console.log(data)
+
+  const onSubmit = (data) => {
+    setPending(true)
+    console.log(data)
+    signInWithEmailAndPassword(auth, data.email, data.password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user
+        console.log(user)
+        setPending(false)
+        navigate('/')
+        // ...
+      })
+      .catch((error) => {
+        const errorCode = error.code
+        const errorMessage = error.message
+        setPending(false)
+        alert(error)
+      })
+  }
+
+  const handleGoogleSignIn = () => {
+    signInWithPopup(auth, googleProvider).then((user) => {
+      console.log(user)
+      setPending(false)
+      navigate('/')
+    })
+  }
+
   console.log(errors)
 
   return (
@@ -44,15 +78,15 @@ export const SignIn = () => {
             </h3>
           </div>
           <div className='flex flex-row gap-8'>
-            <a href=''>
-              <button className='socmed-button'>
-                <img
-                  className='object-cover'
-                  src={GoogleLogo}
-                />
-                <span>Sign in with Google</span>
-              </button>
-            </a>
+            <button
+              onClick={handleGoogleSignIn}
+              className='socmed-button'>
+              <img
+                className='object-cover'
+                src={GoogleLogo}
+              />
+              <span>Sign in with Google</span>
+            </button>
             <a href=''>
               <button className='socmed-button'>
                 <img
@@ -89,7 +123,7 @@ export const SignIn = () => {
                   name='email'
                   type='email'
                   placeholder='Email'
-                  {...register('Email', {
+                  {...register('email', {
                     required: true,
                     pattern: /^\S+@\S+$/i,
                   })}
@@ -106,15 +140,20 @@ export const SignIn = () => {
                   name='passwords'
                   type='password'
                   placeholder='Password'
-                  {...register('Password', { required: true })}
+                  {...register('password', { required: true })}
                 />
               </div>
-
-              <input
-                className='btn-submit'
-                type='submit'
-                value='Login'
-              />
+              {pending ? (
+                <div className='btn-submit flex items-center justify-center'>
+                  <BeatLoader color='#ffffff' />
+                </div>
+              ) : (
+                <input
+                  className='btn-submit'
+                  type='submit'
+                  value='Login'
+                />
+              )}
             </form>
           </div>
         </div>

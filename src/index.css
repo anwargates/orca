@@ -7,7 +7,7 @@
     @apply h-16 px-5 drop-shadow-md rounded-md;
   }
   .btn-submit {
-    @apply h-16 px-5 drop-shadow-md rounded-lg bg-primary font-bold text-white text-2xl;
+    @apply h-16 px-5 drop-shadow-md rounded-lg bg-primary font-bold text-white text-2xl hover:cursor-pointer hover:brightness-105;
   }
 
   .socmed-button {
