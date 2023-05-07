@@ -7,6 +7,8 @@ import Profile from '../../assets/profile.svg'
 import Logout from '../../assets/logout.svg'
 import Camera from '../../assets/camera.svg'
 import { useStore } from '../../global/store'
+import { useDisclosure } from '@mantine/hooks'
+import { UploadProfilePicModal } from '../modals/UploadProfilePicModal'
 
 {
   /* PROFILE TEMPLATE */
@@ -17,9 +19,17 @@ export const ProfileTemplate = () => {
   const handleLogout = () => {
     signOut(auth).then(setLoggedIn(false)).then(navigate('/'))
   }
+  const [showUploadModal, toggleUploadModal] = useDisclosure()
 
   return (
     <>
+      {/* PROFILE PICTURE UPLOAD MODAL */}
+      <UploadProfilePicModal
+      opened = {showUploadModal}
+      modalHandler={toggleUploadModal}
+      
+      />
+
       {/* SIDEBAR */}
       <nav className='absolute py-16 px-5 flex flex-col justify-between items-center top-0 left-0 bg-primary -translate-x-80 lg:-translate-x-0 lg:w-80 h-full z-10 transition-all'>
         {/* TOP SECTION */}
@@ -27,12 +37,12 @@ export const ProfileTemplate = () => {
           {/* PROFILE PICTURE */}
           <div className='relative rounded-2xl overflow-clip w-64 h-48 bg-[#D2EFFC]'>
             <img
-              src={auth?.currentUser?.photoURL??''}
+              src={auth?.currentUser?.photoURL ?? ''}
               alt=''
               className='w-full object-cover'
             />
             <div className='absolute right-2 bottom-16'>
-              <button>
+              <button onClick={()=>toggleUploadModal.open()}>
                 <img
                   src={Camera}
                   alt='camera'
