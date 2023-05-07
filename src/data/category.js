@@ -5,7 +5,7 @@ import Masker from '../assets/home/masker.png'
 import Vespa from '../assets/home/vespa.png'
 import Laut from '../assets/home/laut.png'
 
-export const trustedData = [
+export const categoryData = [
   {
     title: 'PRODUCT PHOTOGRAPHY',
     image: Flannel,
@@ -32,4 +32,4 @@ export const trustedData = [
   },
 ]
 
-export default trustedData
+export default categoryData

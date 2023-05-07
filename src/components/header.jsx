@@ -12,96 +12,130 @@ import {
 } from 'firebase/auth'
 import { auth } from '../config/firebase'
 import { BeatLoader } from 'react-spinners'
+import { useStore } from '../global/store'
+import ProfilePlaceholder from '../assets/profile-placeholder.svg'
 
+// HEADER NAVBAR COMPONENT
 export const Header = () => {
   const [nav, setNav] = useState(false)
+  const { isLoggedIn, setLoggedIn } = useStore()
+  // const pending = useStore((state) => state.authRefreshing)
+  // const isLoggedIn = useStore((state) => state.isLoggedIn)
+  // const setPending = useStore((state) => state.setAuthRefreshing)
   const [pending, setPending] = useState(true)
 
   useEffect(() => {
-    console.log(auth)
+    // setPending(true)
+    // console.log(auth)
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        // user signed out
         console.log(user)
+        setLoggedIn(true)
         setPending(false)
       } else {
+        // user logged out
         console.log(user)
+        setLoggedIn(false)
         setPending(false)
       }
     })
-  }, [])
+  }, [auth])
 
   const handleNav = () => {
     setNav(!nav)
   }
 
-  const handleLogout = () => {
-    signOut(auth).then(window.location.reload())
-  }
-
-  // if (pending) {
-  //   return <>pending...</>
-  // }
-
   return (
     <header className='absolute w-full top-0 z-50'>
       <nav className='bg-primary'>
-        <div className='container flex max-w-7xl mx-auto h-[10vh] p-6 sm:px-16 sm:py-6 items-center justify-between gap-8'>
+        <div className='default-container flex h-[10vh] p-6 sm:px-16 sm:py-6 items-center justify-between gap-8'>
+          {/* LOGO */}
           <Link to='/'>
             <img
               src={LogoOrcaSmall}
               alt='orcalogo'
-              className='w-4/5'
+              className='h-[6vh] w-auto'
             />
           </Link>
-          <div className='text-white'>
-            <ul className='hidden lg:flex gap-8 justify-between'>
-              <li className='header-link-button'>
-                <Link className='hover:text-gray-200' to='/'>Home</Link>
-              </li>
-              <li className='header-link-button'>
-                <Link className='hover:text-gray-200' to='/gabung'>About</Link>
-              </li>
-              <li className='header-link-button'>
-                <Link className='hover:text-gray-200' to='/tentang'>Products</Link>
-              </li>
-              <li className='header-link-button'>
-                <Link className='hover:text-gray-200' to='/tentang'>Pricing</Link>
-              </li>
-              <li className='header-link-button'>
-                <Link className='hover:text-gray-200' to='/tentang'>How It Works</Link>
-              </li>
-            </ul>
-          </div>
-          <div
-            onClick={handleNav}
-            className='block text-white lg:hidden'>
-            {!nav ? <AiOutlineMenu size={20} /> : <AiOutlineClose size={20} />}
-          </div>
-          {pending ? (
-            <div className='w-30 text-white'>
-              <BeatLoader color='#ffffff' />
+
+          <div className='flex items-center gap-10'>
+            {/* NAV LINKS */}
+            <div className='text-white font-bold'>
+              <ul className='hidden lg:flex gap-8 justify-between'>
+                <li className='header-link-button'>
+                  <Link
+                    className='hover:text-gray-200'
+                    to='/'>
+                    Home
+                  </Link>
+                </li>
+                <li className='header-link-button'>
+                  <Link
+                    className='hover:text-gray-200'
+                    to='/photo-category'>
+                    Pesan Sekarang
+                  </Link>
+                </li>
+                <li className='header-link-button'>
+                  <Link
+                    className='hover:text-gray-200'
+                    to='/gallery'>
+                    Gallery
+                  </Link>
+                </li>
+                <li className='header-link-button'>
+                  <Link
+                    className='hover:text-gray-200'
+                    to='/tentang'>
+                    About Us
+                  </Link>
+                </li>
+              </ul>
             </div>
-          ) : auth?.currentUser?.displayName ? (
-            <div className='flex items-center gap-2'>
-              <button className='text-white font-semibold rounded bg-green-300 p-3'>
-                {auth?.currentUser?.displayName}
-              </button>
-              <button
-                className='bg-red-600 text-white p-3 rounded'
-                onClick={handleLogout}>
-                Logout
-              </button>
+
+            {/* NAV RIGHT BUTTON ON MOBILE */}
+            <div
+              onClick={handleNav}
+              className='block text-white lg:hidden'>
+              {!nav ? (
+                <AiOutlineMenu size={20} />
+              ) : (
+                <AiOutlineClose size={20} />
+              )}
             </div>
-          ) : (
-            <div className='hidden lg:flex items-center gap-4'>
-              <Link to='/signup'>
-                <button className='w-28 h-12 bg-blue text-white'>SignUp</button>
+
+            {/* NAV RIGHT BUTTON ON DESKTOP */}
+            {/*  check if still refreshing */}
+            {pending ? (
+              <div className='w-30 text-white'>
+                <BeatLoader color='#ffffff' />
+              </div>
+            ) : // if signed in the show profile picture
+            isLoggedIn ? (
+              <Link
+                to={'/profile'}
+                className='hidden lg:flex items-center gap-2'>
+                <img
+                  src={auth?.currentUser?.photoURL ?? ProfilePlaceholder}
+                  alt='profile'
+                  className='w-auto h-[6vh] rounded-full'
+                />
               </Link>
-              <Link to='/signin'>
-                <button className='w-28 h-12 bg-white text-blue'>Login</button>
-              </Link>
-            </div>
-          )}
+            ) : (
+              // if not signed in the show login button
+              <div className='hidden lg:flex items-center gap-4'>
+                {/* <Link to='/signup'>
+                  <button className='w-28 h-12 bg-blue text-white font-bold'>SignUp</button>
+                </Link> */}
+                <Link to='/signin'>
+                  <button className='w-28 h-12 bg-white text-blue font-bold rounded-lg'>
+                    Log In
+                  </button>
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
     </header>

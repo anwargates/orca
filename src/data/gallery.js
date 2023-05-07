@@ -15,6 +15,11 @@ import Product5 from '../assets/gallery/product5.png'
 import Product6 from '../assets/gallery/product6.png'
 import Sport1 from '../assets/gallery/sport1.png'
 import Sport2 from '../assets/gallery/sport2.png'
+import Sport3 from '../assets/gallery/sport3.png'
+import Sport4 from '../assets/gallery/sport4.png'
+import Sport5 from '../assets/gallery/sport5.png'
+import Sport6 from '../assets/gallery/sport6.png'
+import Sport7 from '../assets/gallery/sport7.png'
 
 export const galleryData = [
   {
@@ -100,6 +105,31 @@ export const galleryData = [
   {
     title: 'SPORT 2',
     image: Sport2,
+    category: 'SPORT',
+  },
+  {
+    title: 'SPORT 3',
+    image: Sport3,
+    category: 'SPORT',
+  },
+  {
+    title: 'SPORT 4',
+    image: Sport4,
+    category: 'SPORT',
+  },
+  {
+    title: 'SPORT 5',
+    image: Sport5,
+    category: 'SPORT',
+  },
+  {
+    title: 'SPORT 6',
+    image: Sport6,
+    category: 'SPORT',
+  },
+  {
+    title: 'SPORT 7',
+    image: Sport7,
     category: 'SPORT',
   },
 ]

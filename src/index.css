@@ -3,6 +3,85 @@
 @tailwind utilities;
 
 @layer components {
+  /* :root {
+    font-family: Poppins, system-ui, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #242424;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+
+   --color-primary: #88ceef;
+    --color-secondary: #ffffff;
+  } */
+
+  /* a {
+    font-weight: 500;
+    color: #88ceef;
+    text-decoration: inherit;
+  } */
+  a:hover {
+    color: #88ceef;
+  }
+
+  body {
+    margin: 0;
+    /* display: flex; */
+    place-items: center;
+    /* min-width: 320px; */
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 4rem;
+    line-height: 1.1;
+  }
+
+  /* button {
+    border-radius: 8px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #1a1a1a;
+    cursor: pointer;
+    transition: border-color 0.25s;
+  } */
+  button:hover {
+    border-color: #88ceef;
+  }
+  button:focus,
+  button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+  }
+
+  /* @media (prefers-color-scheme: light) {
+    :root {
+      color: #213547;
+      background-color: #ffffff;
+    }
+    a:hover {
+      color: #747bff;
+    }
+    button {
+      background-color: #f9f9f9;
+    }
+  } */
+
+  /* custom classes */
+
+  .default-container {
+    @apply container max-w-[1440px] mx-auto;
+  }
+
   .input-field {
     @apply h-16 px-5 drop-shadow-md rounded-md;
   }
@@ -14,100 +93,43 @@
     @apply flex flex-row h-16 p-4 text-black rounded-lg items-center justify-center text-center border border-solid border-grey bg-white;
   }
 
-  .header-link-button{
-    @apply transition-all hover:-translate-y-0.5 
+  .header-link-button {
+    @apply transition-all hover:-translate-y-0.5;
   }
 
-  .slick-dots {
+  .home-dots {
     @apply bottom-6;
   }
 
-  .slick-dots li {
+  .home-dots li {
     @apply border-2 w-4 h-4 border-solid border-white rounded-full;
   }
 
-  .slick-dots li button:before{
+  .home-dots li button:before {
     @apply text-[0px];
   }
 
-  .slick-dots li.slick-active {
-    @apply bg-white
+  .home-dots li.slick-active {
+    @apply bg-white;
   }
 
-  .category-active{
-    @apply border-greyCategory transition-all duration-500 -translate-y-1 ease-in-out
+  .category-active {
+    @apply border-greyCategory transition-all duration-500 -translate-y-1 ease-in-out;
+  }
+
+  .testimony-dots {
+    @apply -bottom-12;
+  }
+
+  .testimony-dots li {
+    @apply rounded-full w-4 h-4 bg-grey transition-all;
+  }
+
+  .testimony-dots li button:before {
+    @apply text-[0px];
+  }
+
+  .testimony-dots li.slick-active {
+    @apply w-10 bg-blue;
   }
 }
-
-:root {
-  font-family: Roboto, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  /* line-height: 1.5;
-  font-weight: 400; */
-
-  /* color-scheme: light dark; */
-  /* color: rgba(255, 255, 255, 0.87); */
-  /* background-color: #242424; */
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-
-  /* --color-primary: #88ceef;
-  --color-secondary: #ffffff; */
-}
-
-a {
-  /* font-weight: 500; */
-  /* color: #88ceef; */
-  text-decoration: inherit;
-}
-a:hover {
-  color: #88ceef;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 4rem;
-  line-height: 1.1;
-}
-
-/* button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-} */
-button:hover {
-  border-color: #88ceef;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-/* @media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
