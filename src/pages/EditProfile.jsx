@@ -11,19 +11,18 @@ import {
 } from 'firebase/auth'
 import { useDisclosure } from '@mantine/hooks'
 import { FormReauthModal } from '../components/modals/FormReauthModal'
-import { Notification, Tooltip } from '@mantine/core'
+import {
+  Loader,
+  LoadingOverlay,
+  Notification,
+  Radio,
+  Tooltip,
+} from '@mantine/core'
 import { BsCheckCircleFill, BsX } from 'react-icons/bs'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
 import { BeatLoader } from 'react-spinners'
 
 export const EditProfile = () => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    getValues,
-    formState: { errors },
-  } = useForm()
   const [isModalOpened, toggleModal] = useDisclosure(false)
   const [isNotify, toggleNotify] = useDisclosure(false)
   const [isNotifyWrongPassword, toggleNotifyWrongPassword] =
@@ -32,26 +31,32 @@ export const EditProfile = () => {
   const isNotEmailEditable =
     auth.currentUser.providerData[0].providerId !== 'password'
 
-  // console.log('provider check', isNotEmailEditable)
-  // console.log('form values', getValues())
-
-  useEffect(() => {
-    getUserProfile()
-  }, [])
 
   // GET FIRESTORE USER PROFILE ON PAGE LOAD
-  const getUserProfile = () => {
+  const getUserProfile = async () => {
     const userRef = doc(db, 'users', auth.currentUser.uid)
-    getDoc(userRef).then((docSnap) => {
+    const result = await getDoc(userRef).then((docSnap) => {
       if (docSnap.exists())
-        reset({
+        return {
           displayName: auth.currentUser.displayName,
           email: auth.currentUser.email,
           nomorWA: docSnap.data().phoneNumber,
           jkel: docSnap.data().gender,
-        })
+        }
     })
+    // console.log('result', result)
+    return result
   }
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    getValues,
+    formState: { errors, isDirty, dirtyFields, isLoading },
+  } = useForm({
+    defaultValues: getUserProfile,
+  })
 
   // SUBMIT HANDLER
   const onSubmit = async (data) => {
@@ -143,6 +148,18 @@ export const EditProfile = () => {
         loadingHandler={toggleLoading}
       />
 
+      {/* LOADING OVERLAY */}
+      <LoadingOverlay
+        loader={
+          <Loader
+            variant='dots'
+            size={80}
+          />
+        }
+        visible={loading}
+        overlayBlur={2}
+      />
+
       <div className='container grid grid-cols-1 lg:grid-cols-3 items-start justify-center w-full lg:max-w-5xl'>
         {/* ORCA LOGO */}
         <div className='flex p-8'>
@@ -154,7 +171,17 @@ export const EditProfile = () => {
         </div>
 
         {/* FORM */}
-        <div className='col-span-2 flex items-center justify-center p-8'>
+        <div className='col-span-2 relative flex items-center justify-center p-8'>
+          <LoadingOverlay
+            loader={
+              <Loader
+                variant='dots'
+                size={80}
+              />
+            }
+            visible={isLoading}
+            overlayBlur={2}
+          />
           <form
             className='flex flex-col gap-6 w-full'
             onSubmit={handleSubmit(onSubmit)}>
@@ -209,7 +236,17 @@ export const EditProfile = () => {
               />
             </div>
             <div className='flex justify-start gap-5 flex-wrap'>
-              <div className='flex gap-2'>
+              <Radio
+                {...register('jkel')}
+                value='Laki-laki'
+                label='Laki-Laki'
+              />
+              <Radio
+                {...register('jkel')}
+                value='Perempuan'
+                label='Perempuan'
+              />
+              {/* <div className='flex gap-2'>
                 <input
                   {...register('jkel')}
                   type='radio'
@@ -227,11 +264,15 @@ export const EditProfile = () => {
                   id='perempuan'
                 />
                 <label htmlFor='perempuan'>Perempuan</label>
-              </div>
+              </div> */}
             </div>
             {loading ? (
               <div className='btn-submit flex items-center justify-center w-full h-14 bg-primary rounded-xl text-white text-2xl font-bold'>
-                <BeatLoader color='#ffffff' />
+                <Loader
+                  variant='dots'
+                  size={80}
+                  color='white'
+                />
               </div>
             ) : (
               <input

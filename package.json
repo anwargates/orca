@@ -1,7 +1,7 @@
 {
   "name": "orca",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,14 +9,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@mantine/carousel": "^6.0.6",
-    "@mantine/core": "^6.0.6",
-    "@mantine/hooks": "^6.0.6",
-    "embla-carousel-autoplay": "^7.1.0",
-    "embla-carousel-react": "^7.1.0",
+    "@emotion/react": "^11.11.0",
+    "@mantine/core": "^6.0.10",
+    "@mantine/dates": "^6.0.10",
+    "@mantine/dropzone": "^6.0.10",
+    "@mantine/form": "^6.0.11",
+    "@mantine/hooks": "^6.0.10",
+    "dayjs": "^1.11.7",
     "firebase": "^9.18.0",
     "framer-motion": "^10.12.4",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.8",

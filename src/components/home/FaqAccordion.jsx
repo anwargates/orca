@@ -1,5 +1,6 @@
 import React from 'react'
 import { Accordion, rem } from '@mantine/core'
+import OrderSteps from '../../assets/home/steps.png'
 
 export const FaqAccordion = () => {
   return (
@@ -22,7 +23,7 @@ export const FaqAccordion = () => {
         <Accordion.Control>
           Berapa jumlah foto yang akan di dapatkan per bundling foto?
         </Accordion.Control>
-        <Accordion.Panel className='border-l-4 border-[#F39C12]'>
+        <Accordion.Panel className='border-l-4 border-primary'>
           Foto yang akan di dapat per bundling itu tergantung bundling yang akan
           di ambil, karena tiap bundling mendapatkan hasil foto yang
           berbeda-beda, contohnya pada bundling Automotive pelanggan akan
@@ -35,7 +36,7 @@ export const FaqAccordion = () => {
         <Accordion.Control>
           Berapa lama hasil foto diserahkan kepada pelanggan?
         </Accordion.Control>
-        <Accordion.Panel className='border-l-4 border-[#F39C12]'>
+        <Accordion.Panel className='border-l-4 border-primary'>
           Foto akan diserahkan 1-2 hari setelah dilakukannya pemotretaan.
         </Accordion.Panel>
       </Accordion.Item>
@@ -44,18 +45,20 @@ export const FaqAccordion = () => {
         <Accordion.Control>
           Bagaimana cara melakukan pemesanan?
         </Accordion.Control>
-        <Accordion.Panel className='border-l-4 border-[#F39C12]'>
-          .
+        <Accordion.Panel className='border-l-4 border-primary'>
+          <img
+            src={OrderSteps}
+            alt=''
+          />
         </Accordion.Panel>
       </Accordion.Item>
 
-      <Accordion.Item value='sertifikat'>
+      <Accordion.Item value='hasil'>
         <Accordion.Control>
-          Kapan e - sertifikat akan diberikan ?
+          Hasil foto di kirim menggunakan via apa?
         </Accordion.Control>
-        <Accordion.Panel className='border-l-4 border-[#F39C12]'>
-          Sertifikat akan diberikan paling lambat dua minggu dari hari terakhir
-          kelas diadakan.
+        <Accordion.Panel className='border-l-4 border-primary'>
+          Hasil foto akan dikirimkan melalui link Google Drive
         </Accordion.Panel>
       </Accordion.Item>
     </Accordion>

@@ -16,3 +16,17 @@ export const reauthStore = create((set) => ({
   },
   setReauthFormState: (form) => set(() => ({ reauthFormState: form })),
 }))
+
+export const usePaymentStore = create((set) => ({
+  // paymentFormState: {
+  //   lokasi: '',
+  //   tanggal: [null, null],
+  //   metode: '',
+  //   bukti: '',
+  // },
+  // setPaymentFormState: (form) => set(() => ({ paymentFormState: form })),
+  lokasi: '',
+  tanggal: [null, null],
+  metode: '',
+  bukti: '',
+}))

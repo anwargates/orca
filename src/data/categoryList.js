@@ -7,7 +7,7 @@ import Laut from '../assets/home/laut.png'
 
 export const categoryList = [
   {
-    title: 'PRODUCT PHOTOGRAPHY',
+    title: 'product photography',
     image: [Flannel, Flannel],
     location: 'Jakarta',
     max: '2 Produk',
@@ -19,7 +19,7 @@ export const categoryList = [
     price: 500,
   },
   {
-    title: 'SPORT PHOTOGRAPHY',
+    title: 'sport photography',
     image: [Motor, Motor],
     location: 'Jakarta',
     max: '2 Orang',
@@ -31,7 +31,7 @@ export const categoryList = [
     price: 250,
   },
   {
-    title: 'EVENT PHOTOGRAPHY',
+    title: 'event photography',
     image: [Vespa, Vespa],
     location: 'Jakarta',
     max: '',
@@ -43,7 +43,7 @@ export const categoryList = [
     price: 800,
   },
   {
-    title: 'FAMILY PHOTOGRAPHY',
+    title: 'family photography',
     image: [Laut, Laut],
     location: 'Jakarta',
     max: '1 Keluarga',
@@ -55,7 +55,7 @@ export const categoryList = [
     price: 250,
   },
   {
-    title: 'PORTRAIT PHOTOGRAPHY',
+    title: 'portrait photography',
     image: [Masker, Masker],
     location: 'Jakarta',
     max: '2 Orang',
@@ -67,7 +67,7 @@ export const categoryList = [
     price: 250,
   },
   {
-    title: 'WEDDING PHOTOGRAPHY',
+    title: 'wedding photography',
     image: [Wedding, Wedding],
     location: 'Jakarta',
     max: '',

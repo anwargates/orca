@@ -12,24 +12,28 @@ import categoryList from '../data/categoryList'
 
 export const DetailCategory = () => {
   const { id } = useParams()
-  const [currentCategory, setCurrentCategory] = useState(null)
-  const images = [Event1, Event1, Event1]
+  // const [currentCategory, setCurrentCategory] = useState(null)
+  // const images = [Event1, Event1, Event1]
 
-  useEffect(() => {
-    const filtered = categoryList.filter((item) =>
-      item.title.includes(id.toUpperCase())
-    )
-    console.log(filtered[0])
-    setCurrentCategory(filtered[0])
-    console.log(currentCategory)
-  }, [])
+  // useEffect(() => {
+  //   const filtered = categoryList.filter((item) =>
+  //     item.title.includes(id.toUpperCase())
+  //   )
+  //   console.log(filtered[0])
+  //   setCurrentCategory(filtered[0])
+  //   console.log(currentCategory)
+  // }, [])
+
+  const currentCategory = categoryList.find((item) =>
+    item.title.includes(id)
+  )
 
   return currentCategory ? (
     <>
       {console.log(currentCategory)}
 
       <div className='mt-40'>
-        <div className='rounded-full bg-primary text-white font-bold text-5xl py-11 md:w-[717px] inset-x-0 mx-auto'>
+        <div className='rounded-full bg-primary text-white font-bold text-5xl py-11 md:w-[717px] inset-x-0 mx-auto capitalize'>
           {currentCategory.title}
         </div>
       </div>
@@ -125,7 +129,7 @@ export const DetailCategory = () => {
                 </div>
               </div>
               <Link
-                to=''
+                to={`/photo-category/${id}/payment`}
                 className='flex bg-primary items-center justify-center text-white text-3xl font-semibold w-full h-20 rounded-xl'>
                 Pesan Sekarang
               </Link>

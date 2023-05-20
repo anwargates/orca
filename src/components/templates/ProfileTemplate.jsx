@@ -25,9 +25,8 @@ export const ProfileTemplate = () => {
     <>
       {/* PROFILE PICTURE UPLOAD MODAL */}
       <UploadProfilePicModal
-      opened = {showUploadModal}
-      modalHandler={toggleUploadModal}
-      
+        opened={showUploadModal}
+        modalHandler={toggleUploadModal}
       />
 
       {/* SIDEBAR */}
@@ -39,10 +38,10 @@ export const ProfileTemplate = () => {
             <img
               src={auth?.currentUser?.photoURL ?? ''}
               alt=''
-              className='w-full object-cover'
+              className='w-full h-full object-contain'
             />
             <div className='absolute right-2 bottom-16'>
-              <button onClick={()=>toggleUploadModal.open()}>
+              <button onClick={() => toggleUploadModal.open()}>
                 <img
                   src={Camera}
                   alt='camera'

@@ -1,4 +1,12 @@
-import { Modal, Notification } from '@mantine/core'
+import {
+  Group,
+  Loader,
+  LoadingOverlay,
+  Modal,
+  Notification,
+  Text,
+  rem,
+} from '@mantine/core'
 import { useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { auth, db, storage } from '../../config/firebase'
@@ -9,13 +17,20 @@ import {
   updatePhoneNumber,
   updateProfile,
 } from 'firebase/auth'
-import { BsCheckCircleFill, BsCameraFill } from 'react-icons/bs'
+import {
+  BsCheckCircleFill,
+  BsCameraFill,
+  BsCloudUpload,
+  BsX,
+  BsImage,
+} from 'react-icons/bs'
 import { useDisclosure } from '@mantine/hooks'
 import { doc } from 'firebase/firestore'
 import { reauthStore } from '../../global/store'
 import { BeatLoader } from 'react-spinners'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
+import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 
 export const UploadProfilePicModal = ({
   opened,
@@ -45,9 +60,9 @@ export const UploadProfilePicModal = ({
   }
 
   // HANDLE FILE CHANGE
-  const handleChange = (event) => {
-    console.log(event.target.files[0])
-    setFile(event.target.files[0])
+  const handleChange = (selectedFiles) => {
+    console.log(selectedFiles)
+    setFile(selectedFiles[0])
     setError(null)
   }
 
@@ -91,12 +106,68 @@ export const UploadProfilePicModal = ({
       <Modal
         opened={opened}
         onClose={handleClose}
+        className='relative'
         title='Upload Foto Profile'
         centered>
-        <div
-          className='popup'
-          onClick={(e) => e.stopPropagation()}>
-          <div
+        {/* LOADING OVERLAY */}
+        <LoadingOverlay
+          loader={
+            <Loader
+              variant='dots'
+              size={80}
+            />
+          }
+          visible={pending}
+          overlayBlur={2}
+        />
+
+        <Dropzone
+          onDrop={handleChange}
+          onReject={(files) => console.log('rejected files', files)}
+          // maxSize={3 * 1024 ** 2}
+          accept={IMAGE_MIME_TYPE}
+          // loading={true}
+          maxFiles={1}>
+          <Group className='flex justify-center items-center gap-6 h-52'>
+            <Dropzone.Accept>
+              <BsCloudUpload size={80} />
+            </Dropzone.Accept>
+            <Dropzone.Reject>
+              <BsX size={80} />
+            </Dropzone.Reject>
+            <Dropzone.Idle>
+              {file ? (
+                <>
+                  <div className='flex flex-col justify-center items-center'>
+                    <img
+                      src={URL.createObjectURL(file)}
+                      className='w-40 h-40 mb-2'
+                    />
+                    <span className='text-xl inline'>
+                      Click upload if ready
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className='flex flex-col justify-center items-center'>
+                    <BsImage
+                      className='mb-10'
+                      size={80}
+                    />
+                    <span className='text-xl inline'>
+                      Drag images here or click to select files
+                    </span>
+                    <span className='text-sm text-slate-500 inline'>
+                      File should not exceed 5mb
+                    </span>
+                  </div>
+                </>
+              )}
+            </Dropzone.Idle>
+          </Group>
+        </Dropzone>
+        {/* <div
             className='w-full h-52 flex justify-center items-center bg-white cursor-pointer caret-transparent p-2 rounded-2xl border-gray-500 border'
             onClick={() => {
               fileInputRef.current.click()
@@ -117,41 +188,20 @@ export const UploadProfilePicModal = ({
             ref={fileInputRef}
             style={{ display: 'none' }}
             onChange={handleChange}
-          />
-          <button
-            className='flex justify-center items-center bg-primary w-full mt-6 h-6 p-6 rounded-xl text-white'
-            disabled={pending ? true : false}
-            onClick={handleUploadProfilePic}>
-            {pending ? (
-              <BeatLoader
-                size={16}
-                color='#ffffff'
-              />
-            ) : (
-              'Upload'
-            )}
-          </button>
-        </div>
-
-        {/* <form
-          className='flex flex-col gap-8 text-left w-96'
-          onSubmit={handleSubmit(reauthHandler)}>
-          <div className='flex flex-col'>
-            <label
-              className='font-normal'
-              htmlFor='password'>
-              Masukkan Password
-            </label>
-            <input
-              type='file'
-              name='profile-picture'
-              id=''
-              className='input-file'
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleChange}
+          /> */}
+        <button
+          className='flex justify-center items-center bg-primary w-full mt-6 h-6 p-6 rounded-xl text-white'
+          disabled={pending ? true : false}
+          onClick={handleUploadProfilePic}>
+          {pending ? (
+            <BeatLoader
+              size={16}
+              color='#ffffff'
             />
-          </div> */}
+          ) : (
+            'Upload'
+          )}
+        </button>
 
         {/* SHOW LOADING ANIMATION */}
         {/* {pending ? (

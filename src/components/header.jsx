@@ -14,10 +14,13 @@ import { auth } from '../config/firebase'
 import { BeatLoader } from 'react-spinners'
 import { useStore } from '../global/store'
 import ProfilePlaceholder from '../assets/profile-placeholder.svg'
+import { Burger } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 
 // HEADER NAVBAR COMPONENT
 export const Header = () => {
-  const [nav, setNav] = useState(false)
+  // const [nav, setNav] = useState(false)
+  const [nav, { toggle }] = useDisclosure(false);
   const { isLoggedIn, setLoggedIn } = useStore()
   // const pending = useStore((state) => state.authRefreshing)
   // const isLoggedIn = useStore((state) => state.isLoggedIn)
@@ -95,7 +98,7 @@ export const Header = () => {
             </div>
 
             {/* NAV RIGHT BUTTON ON MOBILE */}
-            <div
+            {/* <div
               onClick={handleNav}
               className='block text-white lg:hidden'>
               {!nav ? (
@@ -103,7 +106,9 @@ export const Header = () => {
               ) : (
                 <AiOutlineClose size={20} />
               )}
-            </div>
+            </div> */}
+
+            <Burger className='block lg:hidden' color='white' opened={nav} onClick={toggle}/>
 
             {/* NAV RIGHT BUTTON ON DESKTOP */}
             {/*  check if still refreshing */}

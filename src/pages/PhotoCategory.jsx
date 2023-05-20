@@ -43,8 +43,10 @@ const Card = ({ title, pict, link }) => (
       src={pict}
       alt=''
     />
-    <Link className='bg-primary w-full rounded-2xl text-white text-xl font-bold py-3 hover:text-gray-100' to={`/photo-category/${link}`}>
-        See More
+    <Link
+      className='bg-primary w-full rounded-2xl text-white text-xl font-bold py-3 hover:text-gray-100'
+      to={`/photo-category/${link}`}>
+      See More
     </Link>
   </div>
 )

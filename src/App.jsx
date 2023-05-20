@@ -14,6 +14,8 @@ import { EditProfile } from './pages/EditProfile'
 import { PhotoCategory } from './pages/PhotoCategory'
 import { DetailCategory } from './pages/DetailCategory'
 import { ProfileTemplate } from './components/templates/ProfileTemplate'
+import { Loader, LoadingOverlay } from '@mantine/core'
+import { Payment } from './pages/Payment'
 
 function App() {
   const pending = useStore((state) => state.authRefreshing)
@@ -43,62 +45,90 @@ function App() {
   console.log(auth.currentUser !== null ? 'true' : 'false')
 
   return pending ? (
-    <div className="flex h-screen items-center justify-center w-full">
-      <BeatLoader color='#88ceef' />
+    <div className='flex h-screen items-center justify-center w-full'>
+      {/* <BeatLoader color='#88ceef' /> */}
+      <LoadingOverlay
+        loader={
+          <Loader
+            variant='dots'
+            size={80}
+          />
+        }
+        visible={true}
+        overlayBlur={2}
+      />
     </div>
   ) : (
-    <Routes>
-      {/* main */}
-      <Route
-        path='/'
-        element={<MainTemplate />}>
+    <>
+      {/* <LoadingOverlay
+        loader={
+          <Loader
+            variant='dots'
+            size={80}
+          />
+        }
+        visible={overlayPending}
+        overlayBlur={2}
+      /> */}
+      <Routes>
+        {/* main */}
         <Route
-          index
-          element={<HomePage />}
-        />
-        <Route
-          path='/gallery'
-          element={<Gallery />}
-        />
-        <Route
-          path='/photo-category'
-          element={<PhotoCategory />}
-        />
-        <Route
-          path='/photo-category/:id'
-          element={<DetailCategory />}
-        />
-      </Route>
+          path='/'
+          element={<MainTemplate />}>
+          <Route
+            index
+            element={<HomePage />}
+          />
+          <Route
+            path='/gallery'
+            element={<Gallery />}
+          />
+          <Route
+            path='/photo-category'
+            element={<PhotoCategory />}
+          />
+          <Route
+            path='/photo-category/:id'
+            element={<DetailCategory />}
+          />
+          <Route element={<UserCheck />}>
+            <Route
+              path='/photo-category/:id/payment'
+              element={<Payment />}
+            />
+          </Route>
+        </Route>
 
-      <Route element={<LoginCheck />}>
-        <Route
-          path='/signup'
-          element={<SignUp />}
-        />
-        <Route
-          path='/signin'
-          element={<SignIn />}
-        />
-      </Route>
+        <Route element={<LoginCheck />}>
+          <Route
+            path='/signup'
+            element={<SignUp />}
+          />
+          <Route
+            path='/signin'
+            element={<SignIn />}
+          />
+        </Route>
 
-      {/* <Route element={<UserCheck />}>
+        {/* <Route element={<UserCheck />}>
         <Route
           path='/edit-profile'
           element={<EditProfile />}
         />
       </Route> */}
 
-      <Route element={<UserCheck />}>
-        <Route
-          path='/profile'
-          element={<ProfileTemplate />}>
+        <Route element={<UserCheck />}>
           <Route
-            index
-            element={<EditProfile />}
-          />
+            path='/profile'
+            element={<ProfileTemplate />}>
+            <Route
+              index
+              element={<EditProfile />}
+            />
+          </Route>
         </Route>
-      </Route>
-    </Routes>
+      </Routes>
+    </>
   )
 }
 
