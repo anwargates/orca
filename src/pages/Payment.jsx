@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Stepper, Button, Group } from '@mantine/core'
-import { FirstStep } from '../components/payments/FirstStep'
-import { useParams } from 'react-router-dom'
+import { Button, Group, Stepper } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import React, { useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { FirstStep } from '../components/payments/FirstStep'
 import { SecondStep } from '../components/payments/SecondStep'
 import { ThirdStep } from '../components/payments/ThirdStep'
+import { auth } from '../config/firebase'
 import categoryList from '../data/categoryList'
 
 export const Payment = () => {
@@ -16,6 +17,7 @@ export const Payment = () => {
 
     return `${randomString}${timestamp}`
   }
+  // @ts-ignore
   const currentCategory = categoryList.find((item) => item.title.includes(id))
 
   const [active, setActive] = useState(0)
@@ -26,9 +28,16 @@ export const Payment = () => {
       tanggal: [null, null],
       metode: '',
       orderId: generateOrderId(),
+      // @ts-ignore
       kategori: currentCategory.title,
+      // @ts-ignore
       max: currentCategory.max,
+      // @ts-ignore
       price: currentCategory.price / 2,
+      // @ts-ignore
+      userName: auth.currentUser.displayName,
+      // @ts-ignore
+      userId: auth.currentUser.uid,
       // bukti: null,
     },
     validate: {
@@ -72,7 +81,7 @@ export const Payment = () => {
       case 2:
         return <ThirdStep {...contentProps} />
       default:
-        return
+        return null
     }
   }
 
@@ -92,7 +101,7 @@ export const Payment = () => {
           </Stepper>
         </div>
         <StepContent step={active} />
-        <Group
+        {/* <Group
           position='center'
           mt='xl'>
           <Button
@@ -105,7 +114,7 @@ export const Payment = () => {
             onClick={nextStep}>
             Next step
           </Button>
-        </Group>
+        </Group> */}
       </section>
     </>
   )

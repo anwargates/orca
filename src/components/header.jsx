@@ -1,27 +1,21 @@
+import { Avatar, Burger } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { onAuthStateChanged } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import LogoOrcaSmall from '../assets/logo-orca-small.svg'
-import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai'
-import {
-  setPersistence,
-  signInWithRedirect,
-  browserSessionPersistence,
-  GoogleAuthProvider,
-  signOut,
-  onAuthStateChanged,
-} from 'firebase/auth'
-import { auth } from '../config/firebase'
 import { BeatLoader } from 'react-spinners'
-import { useStore } from '../global/store'
+// @ts-ignore
+import LogoOrcaSmall from '../assets/logo-orca-small.svg'
+// @ts-ignore
 import ProfilePlaceholder from '../assets/profile-placeholder.svg'
-import { Burger } from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
+import { auth } from '../config/firebase'
+import { useStore } from '../global/store'
 
 // HEADER NAVBAR COMPONENT
 export const Header = () => {
   // const [nav, setNav] = useState(false)
-  const [nav, { toggle }] = useDisclosure(false);
-  const { isLoggedIn, setLoggedIn } = useStore()
+  const [nav, { toggle }] = useDisclosure(false)
+  const { isLoggedIn, setLoggedIn, isAdmin } = useStore()
   // const pending = useStore((state) => state.authRefreshing)
   // const isLoggedIn = useStore((state) => state.isLoggedIn)
   // const setPending = useStore((state) => state.setAuthRefreshing)
@@ -45,9 +39,9 @@ export const Header = () => {
     })
   }, [auth])
 
-  const handleNav = () => {
-    setNav(!nav)
-  }
+  // const handleNav = () => {
+  //   setNav(!nav)
+  // }
 
   return (
     <header className='absolute w-full top-0 z-50'>
@@ -108,7 +102,12 @@ export const Header = () => {
               )}
             </div> */}
 
-            <Burger className='block lg:hidden' color='white' opened={nav} onClick={toggle}/>
+            <Burger
+              className='block lg:hidden'
+              color='white'
+              opened={nav}
+              onClick={toggle}
+            />
 
             {/* NAV RIGHT BUTTON ON DESKTOP */}
             {/*  check if still refreshing */}
@@ -119,12 +118,18 @@ export const Header = () => {
             ) : // if signed in the show profile picture
             isLoggedIn ? (
               <Link
-                to={'/profile'}
+                to={isAdmin?'/admin':'/profile'}
                 className='hidden lg:flex items-center gap-2'>
-                <img
+                {/* <img
                   src={auth?.currentUser?.photoURL ?? ProfilePlaceholder}
                   alt='profile'
                   className='w-auto h-[6vh] rounded-full'
+                /> */}
+                <Avatar
+                  src={auth?.currentUser?.photoURL ?? ProfilePlaceholder}
+                  alt='profile'
+                  radius='xl'
+                  size='6vh'
                 />
               </Link>
             ) : (

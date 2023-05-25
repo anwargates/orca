@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import DetailSlider from '../components/slider/DetailSlider'
-import Event1 from '../assets/gallery/event1.png'
-import Location from '../assets/location.svg'
-import Person from '../assets/person.svg'
-import CircleStar from '../assets/circle-star.svg'
-import GoogleDrive from '../assets/google-drive-folder.svg'
-import ImageSquare from '../assets/image-square.svg'
-import BackButton from '../assets/back-button.svg'
+import React from 'react'
 import { Link, useParams } from 'react-router-dom'
+// @ts-ignore
+import BackButton from '../assets/back-button.svg'
+// @ts-ignore
+import CircleStar from '../assets/circle-star.svg'
+// @ts-ignore
+import GoogleDrive from '../assets/google-drive-folder.svg'
+// @ts-ignore
+import ImageSquare from '../assets/image-square.svg'
+// @ts-ignore
+import Location from '../assets/location.svg'
+// @ts-ignore
+import Person from '../assets/person.svg'
+import DetailSlider from '../components/slider/DetailSlider'
 import categoryList from '../data/categoryList'
 
 export const DetailCategory = () => {
@@ -25,6 +30,7 @@ export const DetailCategory = () => {
   // }, [])
 
   const currentCategory = categoryList.find((item) =>
+    // @ts-ignore
     item.title.includes(id)
   )
 

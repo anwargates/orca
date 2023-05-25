@@ -1,9 +1,15 @@
+// @ts-ignore
 import Flannel from '../assets/home/flannel.png'
-import Motor from '../assets/home/motor.png'
-import Wedding from '../assets/home/wedding.png'
-import Masker from '../assets/home/masker.png'
-import Vespa from '../assets/home/vespa.png'
+// @ts-ignore
 import Laut from '../assets/home/laut.png'
+// @ts-ignore
+import Masker from '../assets/home/masker.png'
+// @ts-ignore
+import Motor from '../assets/home/motor.png'
+// @ts-ignore
+import Vespa from '../assets/home/vespa.png'
+// @ts-ignore
+import Wedding from '../assets/home/wedding.png'
 
 export const categoryList = [
   {

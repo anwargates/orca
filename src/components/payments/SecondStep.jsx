@@ -1,16 +1,16 @@
+// @ts-nocheck
 import { FileInput, Loader, LoadingOverlay } from '@mantine/core'
-import React, { useRef, useState } from 'react'
-import QR from '../../assets/payment/QR.png'
-import Gopay from '../../assets/payment/Gopay.png'
-import CClogo from '../../assets/cc-logo.svg'
-import categoryList from '../../data/categoryList'
+import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { auth, db, storage } from '../../config/firebase'
-import { v4 } from 'uuid'
 import moment from 'moment'
 import 'moment/locale/id'
+import React, { useRef, useState } from 'react'
+import { v4 } from 'uuid'
+import CClogo from '../../assets/cc-logo.svg'
+import { auth, database, db, storage } from '../../config/firebase'
+import categoryList from '../../data/categoryList'
 import { dataPayment } from '../../data/paymentMethods'
-import { doc, setDoc } from 'firebase/firestore'
+import { push, set, ref as dbRef } from 'firebase/database'
 
 export const SecondStep = ({ form, selected, handler }) => {
   moment().locale('id')
@@ -44,19 +44,11 @@ export const SecondStep = ({ form, selected, handler }) => {
       .then((res) => {
         console.log(res)
         getDownloadURL(res.ref).then((url) => {
-          // updateProfile(auth.currentUser, { photoURL: url })
-          // toggleNotify.open()
-          // console.log(url)
-          form.setFieldValue('bukti', url)
-          handleCreateDoc()
-
-          setPending(false)
-
-          // nextStep()
-          // handleClose()
+          handleCreateDoc(url)
         })
       })
       .catch((e) => console.log(e))
+    // .finally(setPending(false))
   }
 
   const currentCategory = categoryList.find((item) =>
@@ -69,19 +61,45 @@ export const SecondStep = ({ form, selected, handler }) => {
     return item.value.includes(form.values.metode)
   })
 
-  const handleCreateDoc = async () => {
+  const handleCreateDoc = async (url) => {
     const { orderId, ...rest } = form.values
     await setDoc(doc(db, 'payments', orderId), {
-      userId: auth.currentUser.uid,
       ...rest,
+      bukti: url,
+      status: 'Pembayaran DP',
+      timestamp: serverTimestamp(),
     })
       .then((res) => {
         console.log('create doc success', res)
+        handleNotify()
         nextStep()
       })
       .catch((e) => {
-        setErrorMessage(e.message)
-        setPending(false)
+        console.log(e)
+      })
+  }
+
+  const handleNotify = () => {
+    const adminNotificationsRef = dbRef(
+      database,
+      `notifications/adminNotifications/${auth.currentUser.uid}`
+    )
+
+    // Generate a unique ID for the notification
+    const newNotificationRef = push(adminNotificationsRef)
+
+    // Set the data for the notification
+    set(newNotificationRef, {
+      title: 'Pembayaran DP baru!',
+      message: 'Silakan cek tabel pembayaran',
+      timestamp: new Date().getTime(),
+      read: false,
+    })
+      .then(() => {
+        console.log('Notification created successfully for admin.')
+      })
+      .catch((error) => {
+        console.error('Error creating notification for admin:', error)
       })
   }
 
@@ -190,9 +208,7 @@ export const SecondStep = ({ form, selected, handler }) => {
             </div>
             <div className='w-[320px] h-[123px] bg-white shadow-md rounded-lg text-left flex flex-col justify-center items-start px-7 gap-2 relative'>
               <p className='font-bold text-xl opacity-50'>Total Pesanan</p>
-              <p className='font-bold text-4xl'>
-                {form.values.price}.000
-              </p>
+              <p className='font-bold text-4xl'>{form.values.price}.000</p>
               <div className='absolute bottom-5 right-5'>
                 <img
                   src={CClogo}

@@ -1,16 +1,3 @@
-import React, { useEffect, useState } from 'react'
-import LogoOrca from '../assets/logo-orca.svg'
-import { useForm } from 'react-hook-form'
-import { auth, db } from '../config/firebase'
-import {
-  EmailAuthProvider,
-  reauthenticateWithCredential,
-  updateEmail,
-  updatePhoneNumber,
-  updateProfile,
-} from 'firebase/auth'
-import { useDisclosure } from '@mantine/hooks'
-import { FormReauthModal } from '../components/modals/FormReauthModal'
 import {
   Loader,
   LoadingOverlay,
@@ -18,9 +5,21 @@ import {
   Radio,
   Tooltip,
 } from '@mantine/core'
-import { BsCheckCircleFill, BsX } from 'react-icons/bs'
+import { useDisclosure } from '@mantine/hooks'
+import {
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+  updateEmail,
+  updateProfile,
+} from 'firebase/auth'
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
-import { BeatLoader } from 'react-spinners'
+import React from 'react'
+import { useForm } from 'react-hook-form'
+import { BsCheckCircleFill, BsX } from 'react-icons/bs'
+// @ts-ignore
+import LogoOrca from '../assets/logo-orca.svg'
+import { FormReauthModal } from '../components/modals/FormReauthModal'
+import { auth, db } from '../config/firebase'
 
 export const EditProfile = () => {
   const [isModalOpened, toggleModal] = useDisclosure(false)
@@ -29,16 +28,19 @@ export const EditProfile = () => {
     useDisclosure(false)
   const [loading, toggleLoading] = useDisclosure(false)
   const isNotEmailEditable =
+    // @ts-ignore
     auth.currentUser.providerData[0].providerId !== 'password'
-
 
   // GET FIRESTORE USER PROFILE ON PAGE LOAD
   const getUserProfile = async () => {
+    // @ts-ignore
     const userRef = doc(db, 'users', auth.currentUser.uid)
     const result = await getDoc(userRef).then((docSnap) => {
       if (docSnap.exists())
         return {
+          // @ts-ignore
           displayName: auth.currentUser.displayName,
+          // @ts-ignore
           email: auth.currentUser.email,
           nomorWA: docSnap.data().phoneNumber,
           jkel: docSnap.data().gender,
@@ -74,9 +76,11 @@ export const EditProfile = () => {
   // REAUTHENTICATE BEFORE UPDATE DATA
   const reauthHandler = async (password) => {
     const cred = EmailAuthProvider.credential(
+      // @ts-ignore
       auth.currentUser.email,
       password.password
     )
+    // @ts-ignore
     await reauthenticateWithCredential(auth.currentUser, cred)
       .then(() => {
         doUpdateProfile(getValues())
@@ -94,11 +98,14 @@ export const EditProfile = () => {
     // const cred = EmailAuthProvider.credential(data.email, data.password)
     // await reauthenticateWithCredential(auth.currentUser, cred)
 
+    // @ts-ignore
     await updateEmail(auth.currentUser, data.email)
+    // @ts-ignore
     await updateProfile(auth.currentUser, {
       displayName: data.displayName,
     })
 
+    // @ts-ignore
     const userRef = doc(db, 'users', auth.currentUser.uid)
     await updateDoc(userRef, {
       phoneNumber: data.nomorWA,
@@ -160,128 +167,126 @@ export const EditProfile = () => {
         overlayBlur={2}
       />
 
-      <div className='container grid grid-cols-1 lg:grid-cols-3 items-start justify-center w-full lg:max-w-5xl'>
-        {/* ORCA LOGO */}
-        <div className='flex p-8'>
-          <img
-            src={LogoOrca}
-            alt='logo-orca'
-            className='w-24 lg:w-80'
-          />
-        </div>
-
-        {/* FORM */}
-        <div className='col-span-2 relative flex items-center justify-center p-8'>
-          <LoadingOverlay
-            loader={
-              <Loader
-                variant='dots'
-                size={80}
-              />
-            }
-            visible={isLoading}
-            overlayBlur={2}
-          />
-          <form
-            className='flex flex-col gap-6 w-full'
-            onSubmit={handleSubmit(onSubmit)}>
-            <div className='flex flex-col items-start gap-3'>
-              <label
-                className='font-extrabold'
-                htmlFor='nama'>
-                Nama Lengkap
-              </label>
-              <input
-                className='w-full h-10 border rounded-lg border-black p-2'
-                type='text'
-                name='nama'
-                {...register('displayName')}
-              />
-            </div>
-            <Tooltip
-              label={
-                isNotEmailEditable
-                  ? 'Anda tidak diperbolehkan mengganti email jika login menggunakan google atau facebook'
-                  : null
-              }>
-              <div className='flex flex-col items-start gap-3'>
-                <label
-                  className='font-extrabold'
-                  htmlFor='email'>
-                  Alamat Email
-                </label>
-                <input
-                  className={`w-full h-10 border rounded-lg border-black p-2 disabled:bg-gray-400 disabled:border-gray-400`}
-                  type='email'
-                  name='email'
-                  // disabled={providerCheck ? true : false}
-                  {...register('email', {
-                    disabled: isNotEmailEditable ? true : false,
-                    pattern: /^\S+@\S+$/i,
-                  })}
-                />
-              </div>
-            </Tooltip>
-            <div className='flex flex-col items-start gap-3'>
-              <label
-                className='font-extrabold'
-                htmlFor='nomorWA'>
-                Nomor Whatsapp
-              </label>
-              <input
-                className='w-full h-10 border rounded-lg border-black p-2'
-                type='number'
-                name='nomorWA'
-                {...register('nomorWA', {})}
-              />
-            </div>
-            <div className='flex justify-start gap-5 flex-wrap'>
-              <Radio
-                {...register('jkel')}
-                value='Laki-laki'
-                label='Laki-Laki'
-              />
-              <Radio
-                {...register('jkel')}
-                value='Perempuan'
-                label='Perempuan'
-              />
-              {/* <div className='flex gap-2'>
-                <input
-                  {...register('jkel')}
-                  type='radio'
-                  value='Laki-laki'
-                  id='laki'
-                  className='default:bg-gray-500 border-gray-500 checked:bg-primary'
-                />
-                <label htmlFor='laki'>Laki-Laki</label>
-              </div>
-              <div className='flex gap-2'>
-                <input
-                  {...register('jkel')}
-                  type='radio'
-                  value='Perempuan'
-                  id='perempuan'
-                />
-                <label htmlFor='perempuan'>Perempuan</label>
-              </div> */}
-            </div>
-            {loading ? (
-              <div className='btn-submit flex items-center justify-center w-full h-14 bg-primary rounded-xl text-white text-2xl font-bold'>
+      <div className="flex items-start justify-center">
+        <div className='container grid grid-cols-1 lg:grid-cols-3 items-start justify-center w-full lg:max-w-5xl'>
+          {/* ORCA LOGO */}
+          <div className='flex p-8'>
+            <img
+              src={LogoOrca}
+              alt='logo-orca'
+              className='w-24 lg:w-80'
+            />
+          </div>
+          {/* FORM */}
+          <div className='col-span-2 relative flex items-center justify-center p-8'>
+            <LoadingOverlay
+              loader={
                 <Loader
                   variant='dots'
                   size={80}
-                  color='white'
+                />
+              }
+              visible={isLoading}
+              overlayBlur={2}
+            />
+            <form
+              className='flex flex-col gap-6 w-full'
+              onSubmit={handleSubmit(onSubmit)}>
+              <div className='flex flex-col items-start gap-3'>
+                <label
+                  className='font-extrabold'
+                  htmlFor='nama'>
+                  Nama Lengkap
+                </label>
+                <input
+                  className='w-full h-10 border rounded-lg border-black p-2'
+                  type='text'
+                  {...register('displayName')}
                 />
               </div>
-            ) : (
-              <input
-                type='submit'
-                value='Simpan'
-                className='w-full h-14 bg-primary rounded-xl text-white text-2xl font-bold'
-              />
-            )}
-          </form>
+              <Tooltip
+                label={
+                  isNotEmailEditable
+                    ? 'Anda tidak diperbolehkan mengganti email jika login menggunakan google atau facebook'
+                    : null
+                }>
+                <div className='flex flex-col items-start gap-3'>
+                  <label
+                    className='font-extrabold'
+                    htmlFor='email'>
+                    Alamat Email
+                  </label>
+                  <input
+                    className={`w-full h-10 border rounded-lg border-black p-2 disabled:bg-gray-400 disabled:border-gray-400`}
+                    type='email'
+                    // disabled={providerCheck ? true : false}
+                    {...register('email', {
+                      disabled: isNotEmailEditable ? true : false,
+                      pattern: /^\S+@\S+$/i,
+                    })}
+                  />
+                </div>
+              </Tooltip>
+              <div className='flex flex-col items-start gap-3'>
+                <label
+                  className='font-extrabold'
+                  htmlFor='nomorWA'>
+                  Nomor Whatsapp
+                </label>
+                <input
+                  className='w-full h-10 border rounded-lg border-black p-2'
+                  type='number'
+                  {...register('nomorWA', {})}
+                />
+              </div>
+              <div className='flex justify-start gap-5 flex-wrap'>
+                <Radio
+                  {...register('jkel')}
+                  value='Laki-laki'
+                  label='Laki-Laki'
+                />
+                <Radio
+                  {...register('jkel')}
+                  value='Perempuan'
+                  label='Perempuan'
+                />
+                {/* <div className='flex gap-2'>
+                  <input
+                    {...register('jkel')}
+                    type='radio'
+                    value='Laki-laki'
+                    id='laki'
+                    className='default:bg-gray-500 border-gray-500 checked:bg-primary'
+                  />
+                  <label htmlFor='laki'>Laki-Laki</label>
+                </div>
+                <div className='flex gap-2'>
+                  <input
+                    {...register('jkel')}
+                    type='radio'
+                    value='Perempuan'
+                    id='perempuan'
+                  />
+                  <label htmlFor='perempuan'>Perempuan</label>
+                </div> */}
+              </div>
+              {loading ? (
+                <div className='btn-submit flex items-center justify-center w-full h-14 bg-primary rounded-xl text-white text-2xl font-bold'>
+                  <Loader
+                    variant='dots'
+                    size={80}
+                    color='white'
+                  />
+                </div>
+              ) : (
+                <input
+                  type='submit'
+                  value='Simpan'
+                  className='w-full h-14 bg-primary rounded-xl text-white text-2xl font-bold'
+                />
+              )}
+            </form>
+          </div>
         </div>
       </div>
     </>

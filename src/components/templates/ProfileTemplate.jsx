@@ -1,23 +1,34 @@
+import { useDisclosure } from '@mantine/hooks'
+import { signOut } from 'firebase/auth'
 import React from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { signOut } from 'firebase/auth'
-import { auth } from '../../config/firebase'
-import Home from '../../assets/home.svg'
-import Profile from '../../assets/profile.svg'
-import Logout from '../../assets/logout.svg'
+// @ts-ignore
+import Bell from '../../assets/bell.svg'
+// @ts-ignore
 import Camera from '../../assets/camera.svg'
+// @ts-ignore
+import Cart from '../../assets/cart.svg'
+// @ts-ignore
+import Home from '../../assets/home.svg'
+// @ts-ignore
+import Logout from '../../assets/logout.svg'
+// @ts-ignore
+import Profile from '../../assets/profile.svg'
+import { auth } from '../../config/firebase'
 import { useStore } from '../../global/store'
-import { useDisclosure } from '@mantine/hooks'
 import { UploadProfilePicModal } from '../modals/UploadProfilePicModal'
 
 {
   /* PROFILE TEMPLATE */
 }
 export const ProfileTemplate = () => {
+  // @ts-ignore
   const { isLoggedIn, setLoggedIn } = useStore()
   const navigate = useNavigate()
   const handleLogout = () => {
-    signOut(auth).then(setLoggedIn(false)).then(navigate('/'))
+    signOut(auth)
+      .then(setLoggedIn(false))
+      .then(() => navigate('/'))
   }
   const [showUploadModal, toggleUploadModal] = useDisclosure()
 
@@ -65,18 +76,6 @@ export const ProfileTemplate = () => {
           <ul className='flex flex-col list-none gap-11'>
             <li>
               <Link
-                to='/'
-                className='flex text-white font-semibold gap-12'>
-                <img
-                  src={Home}
-                  alt=''
-                  className='w-8'
-                />
-                <span className='text-2xl'>Home</span>
-              </Link>
-            </li>
-            <li>
-              <Link
                 to='/profile'
                 className='flex text-white font-semibold gap-12'>
                 <img
@@ -87,19 +86,54 @@ export const ProfileTemplate = () => {
                 <span className='text-2xl'>Profil</span>
               </Link>
             </li>
+            <li>
+              <Link
+                to='/profile/notifikasi'
+                className='flex text-white font-semibold gap-12'>
+                <img
+                  src={Bell}
+                  alt=''
+                  className='w-8'
+                />
+                <span className='text-2xl'>Notifikasi</span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to='/profile/pesanan'
+                className='flex text-white font-semibold gap-12'>
+                <img
+                  src={Cart}
+                  alt=''
+                  className='w-8'
+                />
+                <span className='text-2xl'>Pesanan</span>
+              </Link>
+            </li>
           </ul>
         </div>
 
-        {/* LOGOUT BUTTON */}
-        <button
-          className='flex w-44 gap-2 text-white items-center text-xl font-semibold bg-[#68B0D1] py-2 px-4 rounded-xl'
-          onClick={handleLogout}>
-          <img
-            src={Logout}
-            alt='logout'
-          />
-          Logout
-        </button>
+        {/* BOTTOM BUTTON */}
+        <div className='flex flex-col gap-4'>
+          <button
+            className='flex w-44 gap-2 text-white items-center justify-around text-xl font-semibold bg-[#68B0D1] py-2 px-4 rounded-xl'
+            onClick={() => navigate('/')}>
+            <img
+              src={Home}
+              alt='logout'
+            />
+            Home
+          </button>
+          <button
+            className='flex w-44 gap-2 text-white items-center justify-around text-xl font-semibold bg-[#68B0D1] py-2 px-4 rounded-xl'
+            onClick={handleLogout}>
+            <img
+              src={Logout}
+              alt='logout'
+            />
+            Logout
+          </button>
+        </div>
       </nav>
 
       {/* TOP BAR */}
@@ -108,7 +142,7 @@ export const ProfileTemplate = () => {
       </div>
 
       {/* CONTENT */}
-      <main className='flex items-center justify-center min-h-screen pt-24 lg:pl-80'>
+      <main className='flex items-start justify-center min-h-screen pt-32 lg:pl-80'>
         <Outlet />
       </main>
     </>

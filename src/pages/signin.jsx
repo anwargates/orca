@@ -1,18 +1,26 @@
 import React, { useState } from 'react'
+// @ts-ignore
 import LogoOrca from '../assets/logo-orca.svg'
+// @ts-ignore
 import GoogleLogo from '../assets/google-logo.svg'
+// @ts-ignore
 import FacebookLogo from '../assets/facebook-logo.svg'
+// @ts-ignore
 import HorizontalLine from '../assets/line.svg'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth'
-import { auth, googleProvider, facebookProvider, db } from '../config/firebase'
-import BeatLoader from 'react-spinners/BeatLoader'
-import { useStore } from '../global/store'
-import { doc, setDoc } from 'firebase/firestore'
 import { Notification } from '@mantine/core'
-import { BsX } from 'react-icons/bs'
 import { useDisclosure } from '@mantine/hooks'
+import {
+  getAdditionalUserInfo,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from 'firebase/auth'
+import { doc, setDoc } from 'firebase/firestore'
+import { useForm } from 'react-hook-form'
+import { BsX } from 'react-icons/bs'
+import { Link, useNavigate } from 'react-router-dom'
+import BeatLoader from 'react-spinners/BeatLoader'
+import { auth, db, facebookProvider, googleProvider } from '../config/firebase'
+import { useStore } from '../global/store'
 
 export const SignIn = () => {
   const navigate = useNavigate()
@@ -24,6 +32,7 @@ export const SignIn = () => {
   const {
     register,
     handleSubmit,
+    // @ts-ignore
     formState: { errors },
   } = useForm()
 
@@ -52,8 +61,9 @@ export const SignIn = () => {
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, googleProvider)
       .then((user) => {
-        console.log('signin with google success', user)
-        handleCreateDoc(user.user.uid)
+        const userInfo = getAdditionalUserInfo(user)
+        if (userInfo?.isNewUser) handleCreateDoc(user.user.uid)
+        console.log('signin with google success', userInfo)
       })
       .catch((e) => {
         console.error(e)
@@ -65,7 +75,9 @@ export const SignIn = () => {
   const handleFacebookSignIn = () => {
     signInWithPopup(auth, facebookProvider)
       .then((user) => {
-        handleCreateDoc(user.user.uid)
+        const userInfo = getAdditionalUserInfo(user)
+        if (userInfo?.isNewUser) handleCreateDoc(user.user.uid)
+        // handleCreateDoc(user.user.uid)
       })
       .catch((e) => {
         console.error(e)
@@ -176,7 +188,6 @@ export const SignIn = () => {
                 </label>
                 <input
                   className='input-field'
-                  name='email'
                   type='email'
                   placeholder='Email'
                   {...register('email', {
@@ -193,7 +204,6 @@ export const SignIn = () => {
                 </label>
                 <input
                   className='input-field'
-                  name='passwords'
                   type='password'
                   placeholder='Password'
                   {...register('password', { required: true })}

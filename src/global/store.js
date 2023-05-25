@@ -3,6 +3,8 @@ import { create } from 'zustand'
 export const useStore = create((set) => ({
   isLoggedIn: false,
   setLoggedIn: (login) => set(() => ({ isLoggedIn: login })),
+  isAdmin: false,
+  setAdmin: (admin) => set(() => ({ isAdmin: admin })),
   authRefreshing: true,
   setAuthRefreshing: (refresh) => set(() => ({ authRefreshing: refresh })),
   actionLoading: false,
@@ -30,3 +32,7 @@ export const usePaymentStore = create((set) => ({
   metode: '',
   bukti: '',
 }))
+
+// export const useOverlayPending = create((set)=>{
+//   overlayPending
+// })

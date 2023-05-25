@@ -32,12 +32,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
 
-export const UploadProfilePicModal = ({
-  opened,
-  modalHandler,
-  uploadHandler,
-  loadingHandler,
-}) => {
+export const UploadProfilePicModal = ({ opened, modalHandler }) => {
   const fileInputRef = useRef(null)
   const [pending, setPending] = useState(false)
   const [isNotify, toggleNotify] = useDisclosure(false)

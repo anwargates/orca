@@ -1,11 +1,17 @@
+// @ts-ignore
 import { Group, Avatar, Text, Select, Input } from '@mantine/core'
+// @ts-ignore
 import React, { forwardRef, useEffect, useState } from 'react'
 import { BsChevronDown } from 'react-icons/bs'
+// @ts-ignore
 import { DatePickerModal } from '../modals/DatePickerModal'
+// @ts-ignore
 import { useDisclosure } from '@mantine/hooks'
+// @ts-ignore
 import moment from 'moment/moment'
 import { DatePickerInput } from '@mantine/dates'
 import categoryList from '../../data/categoryList'
+// @ts-ignore
 import { usePaymentStore } from '../../global/store'
 import { dataPayment } from '../../data/paymentMethods'
 import { useNavigate } from 'react-router-dom'
@@ -35,6 +41,7 @@ const dataLokasi = [
 ]
 
 const SelectPayment = forwardRef(function SelectItem(
+  // @ts-ignore
   { image, ...others },
   ref
 ) {
@@ -53,6 +60,7 @@ const SelectPayment = forwardRef(function SelectItem(
 })
 
 const SelectLokasi = forwardRef(function SelectLokasi(
+  // @ts-ignore
   { label, ...others },
   ref
 ) {
@@ -69,6 +77,7 @@ const SelectLokasi = forwardRef(function SelectLokasi(
 
 export const FirstStep = ({ form, selected, handler }) => {
   const navigate = useNavigate()
+  // @ts-ignore
   const [nextStep, prevStep] = handler
   const currentDate = new Date()
   // const [currentCategory, setCurrentCategory] = useState('')
@@ -82,6 +91,7 @@ export const FirstStep = ({ form, selected, handler }) => {
   //   setCurrentCategory(filtered[0])
   //   console.log(currentCategory)
   // }, [])
+  // @ts-ignore
   const generateOrderId = () => {
     const timestamp = Date.now().toString() // Generate a unique timestamp
     const randomString = Math.random().toString(36).substring(2, 8) // Generate a random string
@@ -98,13 +108,14 @@ export const FirstStep = ({ form, selected, handler }) => {
     if (Object.keys(validate.errors).length === 0) nextStep()
   }
 
+  // @ts-ignore
   const currentCategory = categoryList.find((item) =>
     item.title.includes(selected)
   )
 
   return (
     <div className='grid grid-cols-2 grid-rows-3 gap-20 px-32'>
-      {console.log(form.values)}
+      {/* {console.log(form.values)} */}
       <div className='col-span-2'>
         <div className='grid grid-cols-4 grid-rows-1 gap-2 rounded-3xl bg-[#88CEEF80] py-11 px-20'>
           <div className='col-span-2 col-start-2 row-start-1 text-left'>
@@ -145,6 +156,7 @@ export const FirstStep = ({ form, selected, handler }) => {
           maxDropdownHeight={400}
           rightSection={<BsChevronDown size='1rem' />}
           rightSectionWidth={30}
+          // @ts-ignore
           styles={dropdownStyle}
           transitionProps={{
             transition: 'pop-top-left',
@@ -166,6 +178,7 @@ export const FirstStep = ({ form, selected, handler }) => {
           // value={date}
           // onChange={setDate}
           closeOnChange={false}
+          // @ts-ignore
           styles={dropdownStyle}
           minDate={currentDate}
           value={form.values.tanggal}
@@ -182,6 +195,7 @@ export const FirstStep = ({ form, selected, handler }) => {
           maxDropdownHeight={400}
           rightSection={<BsChevronDown size='1rem' />}
           rightSectionWidth={30}
+          // @ts-ignore
           styles={dropdownStyle}
           transitionProps={{
             transition: 'pop-top-left',

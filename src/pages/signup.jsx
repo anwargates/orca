@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react'
-import LogoOrca from '../assets/logo-orca.svg'
-import GoogleLogo from '../assets/google-logo.svg'
-import FacebookLogo from '../assets/facebook-logo.svg'
-import HorizontalLine from '../assets/line.svg'
-import { useForm } from 'react-hook-form'
-import { Link, useNavigate } from 'react-router-dom'
-import { auth, db, facebookProvider, googleProvider } from '../config/firebase'
+import { Notification } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
 import {
   createUserWithEmailAndPassword,
-  updateProfile,
-  getAuth,
+  getAdditionalUserInfo,
   signInWithPopup,
+  updateProfile,
 } from 'firebase/auth'
-import BeatLoader from 'react-spinners/BeatLoader'
-import { useStore } from '../global/store'
 import { doc, setDoc } from 'firebase/firestore'
-import { useDisclosure } from '@mantine/hooks'
-import { Notification } from '@mantine/core'
+import React, { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { BsX } from 'react-icons/bs'
+import { Link, useNavigate } from 'react-router-dom'
+import BeatLoader from 'react-spinners/BeatLoader'
+// @ts-ignore
+import FacebookLogo from '../assets/facebook-logo.svg'
+// @ts-ignore
+import GoogleLogo from '../assets/google-logo.svg'
+// @ts-ignore
+import HorizontalLine from '../assets/line.svg'
+// @ts-ignore
+import LogoOrca from '../assets/logo-orca.svg'
+import { auth, db, facebookProvider, googleProvider } from '../config/firebase'
+import { useStore } from '../global/store'
 
 export const SignUp = () => {
   const navigate = useNavigate()
@@ -44,6 +48,7 @@ export const SignUp = () => {
       .then((userCredential) => {
         handleCreateDoc(userCredential.user.uid)
         console.log(userCredential)
+        // @ts-ignore
         updateProfile(auth.currentUser, {
           displayName: data.name,
         }).catch((e) => {
@@ -65,8 +70,10 @@ export const SignUp = () => {
   const handleGoogleSignIn = () => {
     signInWithPopup(auth, googleProvider)
       .then((user) => {
+        const userInfo = getAdditionalUserInfo(user)
+        if (userInfo?.isNewUser) handleCreateDoc(user.user.uid)
         console.log('signin with google success', user)
-        handleCreateDoc(user.user.uid)
+        // handleCreateDoc(user.user.uid)
       })
       .catch((e) => {
         console.log(e)
@@ -78,7 +85,9 @@ export const SignUp = () => {
   const handleFacebookSignIn = () => {
     signInWithPopup(auth, facebookProvider)
       .then((user) => {
-        handleCreateDoc(user.user.uid)
+        const userInfo = getAdditionalUserInfo(user)
+        if (userInfo?.isNewUser) handleCreateDoc(user.user.uid)
+        // handleCreateDoc(user.user.uid)
       })
       .catch((e) => {
         console.log(e)
@@ -187,7 +196,6 @@ export const SignUp = () => {
                 </label>
                 <input
                   className='input-field'
-                  name='name'
                   type='text'
                   placeholder='Name'
                   {...register('name', { required: true })}
@@ -201,7 +209,6 @@ export const SignUp = () => {
                 </label>
                 <input
                   className='input-field'
-                  name='email'
                   type='email'
                   placeholder='Email'
                   {...register('email', {
@@ -218,7 +225,6 @@ export const SignUp = () => {
                 </label>
                 <input
                   className='input-field'
-                  name='passwords'
                   type='password'
                   placeholder='Password'
                   {...register('password', { required: true })}
