@@ -31,7 +31,7 @@ export const ThirdStep = ({ form, selected, handler }) => {
                     ' - ' +
                     moment(form.values.tanggal[1]).format('Do MMMM YYYY')}
                 </td>
-                <td className='table-cell'>{form.values.price}</td>
+                <td className='table-cell'>{form.values.price}.000</td>
                 <td className='table-cell'>{form.values.metode}</td>
               </tr>
             </tbody>

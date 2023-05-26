@@ -65,6 +65,7 @@ export const SecondStep = ({ form, selected, handler }) => {
     const { orderId, ...rest } = form.values
     await setDoc(doc(db, 'payments', orderId), {
       ...rest,
+      statusCode: 1,
       bukti: url,
       status: 'Pembayaran DP',
       timestamp: serverTimestamp(),

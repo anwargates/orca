@@ -32,6 +32,25 @@ const SelectStatus = forwardRef(function SelectStatus(
   )
 })
 
+const statusCode = (code) => {
+  switch (code) {
+    case 'Pembayaran DP' || 'Verifikasi DP Ditolak':
+      return 1
+      break
+    case 'Verifikasi DP Diterima':
+      return 3
+      break
+    case 'Pembayaran Pelunasan' || 'Verifikasi Pelunasan Ditolak':
+      return 4
+      break
+    case 'Verifikasi Pelunasan Diterima':
+      return 6
+      break
+    default:
+      break
+  }
+}
+
 export const UpdateStatusModal = ({ item }) => {
   const [opened, { open, close }] = useDisclosure(false)
   const [status, setStatus] = useState(item.status)
@@ -42,6 +61,7 @@ export const UpdateStatusModal = ({ item }) => {
     try {
       const documentRef = doc(db, 'payments', item.uid)
       const newData = {
+        statusCode: statusCode(status),
         status: status,
       }
 
@@ -70,6 +90,7 @@ export const UpdateStatusModal = ({ item }) => {
 
     // Set the data for the notification
     set(newNotificationRef, {
+      orderId: item.uid,
       title: status,
       message: 'Silakan cek',
       timestamp: new Date().getTime(),

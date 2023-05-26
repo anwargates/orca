@@ -28,15 +28,11 @@ export const Payment = () => {
       tanggal: [null, null],
       metode: '',
       orderId: generateOrderId(),
-      // @ts-ignore
       kategori: currentCategory.title,
-      // @ts-ignore
+      kategoriImage: currentCategory.image[0],
       max: currentCategory.max,
-      // @ts-ignore
       price: currentCategory.price / 2,
-      // @ts-ignore
       userName: auth.currentUser.displayName,
-      // @ts-ignore
       userId: auth.currentUser.uid,
       // bukti: null,
     },

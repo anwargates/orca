@@ -137,7 +137,7 @@ export const ProfileTemplate = () => {
       </nav>
 
       {/* TOP BAR */}
-      <div className='absolute top-0 w-full flex items-center justify-center h-24 bg-[#68B0D1] lg:pl-80'>
+      <div className='absolute top-0 w-full flex items-center justify-center h-[10vh] bg-[#68B0D1] lg:pl-80'>
         <h1 className='text-white font-bold text-3xl'>Profil</h1>
       </div>
 
