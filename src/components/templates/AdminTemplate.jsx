@@ -1,22 +1,24 @@
+import { useDisclosure } from '@mantine/hooks'
+import { signOut } from 'firebase/auth'
 import React from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-import { signOut } from 'firebase/auth'
-import { auth } from '../../config/firebase'
+// @ts-ignore
 import Home from '../../assets/home.svg'
-import Profile from '../../assets/profile.svg'
+// @ts-ignore
 import Logout from '../../assets/logout.svg'
-import Camera from '../../assets/camera.svg'
+import { auth } from '../../config/firebase'
 import { useStore } from '../../global/store'
-import { useDisclosure } from '@mantine/hooks'
 import { UploadProfilePicModal } from '../modals/UploadProfilePicModal'
 
 {
   /* PROFILE TEMPLATE */
 }
 export const AdminTemplate = () => {
+  // @ts-ignore
   const { isLoggedIn, setLoggedIn } = useStore()
   const navigate = useNavigate()
   const handleLogout = () => {
+    // @ts-ignore
     signOut(auth).then(setLoggedIn(false)).then(navigate('/'))
   }
   const [showUploadModal, toggleUploadModal] = useDisclosure()
@@ -55,7 +57,7 @@ export const AdminTemplate = () => {
                 <span className='text-2xl'>Home</span>
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to='/profile'
                 className='flex text-white font-semibold gap-12'>
@@ -66,7 +68,7 @@ export const AdminTemplate = () => {
                 />
                 <span className='text-2xl'>Profil</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 

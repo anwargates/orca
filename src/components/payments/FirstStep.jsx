@@ -1,20 +1,10 @@
-// @ts-ignore
-import { Group, Avatar, Text, Select, Input } from '@mantine/core'
-// @ts-ignore
-import React, { forwardRef, useEffect, useState } from 'react'
+import { Group, Select, Text } from '@mantine/core'
+import React, { forwardRef } from 'react'
 import { BsChevronDown } from 'react-icons/bs'
-// @ts-ignore
-import { DatePickerModal } from '../modals/DatePickerModal'
-// @ts-ignore
-import { useDisclosure } from '@mantine/hooks'
-// @ts-ignore
-import moment from 'moment/moment'
 import { DatePickerInput } from '@mantine/dates'
 import categoryList from '../../data/categoryList'
-// @ts-ignore
-import { usePaymentStore } from '../../global/store'
-import { dataPayment } from '../../data/paymentMethods'
 import { useNavigate } from 'react-router-dom'
+import { dataPayment } from '../../data/paymentMethods'
 
 const dataLokasi = [
   {
@@ -37,6 +27,10 @@ const dataLokasi = [
   {
     label: 'GBK',
     value: 'GBK',
+  },
+  {
+    label: 'Lainnya...',
+    value: 'Lain',
   },
 ]
 

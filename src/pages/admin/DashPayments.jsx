@@ -12,12 +12,14 @@ import { IoLogoWhatsapp } from 'react-icons/io5'
 import { db } from '../../config/firebase'
 import { PaymentProofModal } from '../../components/modals/PaymentProofModal'
 import { UpdateStatusModal } from '../../components/modals/UpdateStatusModal'
-import { Pagination } from '@mantine/core'
+import { Group, Loader, LoadingOverlay, Pagination } from '@mantine/core'
 import { usePagination } from '@mantine/hooks'
+import { useStore } from '../../global/store'
 
 export const DashPayments = () => {
   const [payments, setPayments] = useState([])
   const [totalItems, setTotalItems] = useState(0)
+  const [pending, setPending] = useState(true)
   // const [currentPage, setCurrentPage] = useState(1)
 
   const itemsPerPage = 5
@@ -53,6 +55,7 @@ export const DashPayments = () => {
   // }
 
   const getPayments = async () => {
+    setPending(true)
     const snapshot = await getCountFromServer(paymentsRef)
     setTotalItems(snapshot.data().count)
     try {
@@ -75,11 +78,25 @@ export const DashPayments = () => {
         uid: doc.id,
         ...doc.data(),
       }))
-      // @ts-ignore
       setPayments(paymentData)
+      setPending(false)
     } catch (error) {
       console.error('Error fetching payments:', error)
+      setPending(false)
     }
+  }
+
+  const handleSendClick = (item) => {
+    const linkGrupWhatsapp =
+      'https%3A%2F%2Fchat.whatsapp.com%2FIFSL0IwH7MfE5RkRfQPGo0'
+    const encodedMessage = `Haii%2C%20${item.userName}%21%0A%0ABerikut%20invoice%20dari%20berlangganan%20kelas%20${item.kategori}%20di%20Kursus%20Editing%20Ruang%20Edit%20dengan%20nomor%20transaksi%20${item.uid}%0A%0AUntuk%20info%20kelas%20lebih%20lengkap%2C%20silahkan%20bergabung%20ke%20grup%20komunitas%20Ruang%20Edit%20%3A%20%0A${linkGrupWhatsapp}%0A%0ATerimakasih%21
+    `
+    // window.open(
+    //   `https://api.whatsapp.com/send?phone=${item.nomorTelepon}&text=${encodedMessage}`
+    // )
+    window.open(
+      `https://api.whatsapp.com/send?phone=6285892716319&text=${encodedMessage}`
+    )
   }
 
   useEffect(() => {
@@ -88,7 +105,16 @@ export const DashPayments = () => {
 
   return (
     <>
-      {console.log(payments)}
+      <LoadingOverlay
+        loader={
+          <Loader
+            variant='dots'
+            size={80}
+          />
+        }
+        visible={pending}
+        overlayBlur={2}
+      />
       <div className='flex p-4 gap-4 flex-col w-full'>
         <div className='flex items-center justify-center w-72 h-12 bg-primary text-white font-bold text-xl rounded-lg'>
           Konfirmasi Pembayaran
@@ -174,7 +200,9 @@ export const DashPayments = () => {
                   />
                 </div>
                 <div className='table-cell text-center align-middle capitalize'>
-                  <div className='hover:cursor-pointer rounded-full'>
+                  <div
+                  onClick={()=>handleSendClick(item)}
+                  className='hover:cursor-pointer rounded-full'>
                     <IoLogoWhatsapp className='text-green-300 text-3xl m-auto' />
                   </div>
                 </div>
@@ -182,15 +210,31 @@ export const DashPayments = () => {
             ))}
           </div>
         </div>
-        <Pagination
+        <Pagination.Root
           total={totalPages}
           value={pagination.active}
           onChange={handlePageChange}
-          position='right'
-          variant='outline'
-          color='blue'
-          size='md'
-        />
+          styles={{
+            control: {
+              backgroundColor: '#88CEEF',
+              '&[type="button"]': {
+                height: '74px',
+              },
+              '&[data-active]': {
+                backgroundColor: '#88CEEF',
+              },
+            },
+          }}
+          // color='#88CEEF'
+          size='md'>
+          <Group
+            position='right'
+            spacing={0}>
+            <Pagination.Previous />
+            <Pagination.Items />
+            <Pagination.Next />
+          </Group>
+        </Pagination.Root>
       </div>
     </>
   )

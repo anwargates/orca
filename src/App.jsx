@@ -21,6 +21,7 @@ import { SignUp } from './pages/SignUp'
 import { DashPayments } from './pages/admin/DashPayments'
 import { UserNotification } from './pages/UserNotification'
 import { Orders } from './pages/Orders'
+import { AdminSignIn } from './pages/admin/AdminSignIn'
 
 function App() {
   const pending = useStore((state) => state.authRefreshing)
@@ -125,6 +126,10 @@ function App() {
           <Route
             path='/signin'
             element={<SignIn />}
+          />
+          <Route
+            path='/admin-signin'
+            element={<AdminSignIn />}
           />
         </Route>
 

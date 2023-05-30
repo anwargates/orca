@@ -1,19 +1,58 @@
-import { Group, Modal, Select, Text } from '@mantine/core'
+import { Group, Modal, NativeSelect, Select, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
+import { ref as dbRef, push, set } from 'firebase/database'
 import { doc, updateDoc } from 'firebase/firestore'
 import React, { forwardRef, useState } from 'react'
 import { BsChevronDown } from 'react-icons/bs'
-import { auth, database, db } from '../../config/firebase'
+import { database, db } from '../../config/firebase'
 import { useStore } from '../../global/store'
-import { push, set, ref as dbRef } from 'firebase/database'
+
+// const dataStatus = [
+//   'Pembayaran DP',
+//   'Verifikasi DP Diterima',
+//   'Verifikasi DP Ditolak',
+//   'Pembayaran Pelunasan',
+//   'Verifikasi Pelunasan Diterima',
+//   'Verifikasi Pelunasan Ditolak',
+// ]
 
 const dataStatus = [
-  'Pembayaran DP',
-  'Verifikasi DP Diterima',
-  'Verifikasi DP Ditolak',
-  'Pembayaran Pelunasan',
-  'Verifikasi Pelunasan Diterima',
-  'Verifikasi Pelunasan Ditolak',
+  {
+    label: 'Pembayaran DP',
+    value: 'Pembayaran DP',
+    statuscode: 1,
+    color: '#FFEFB0',
+  },
+  {
+    label: 'Verifikasi DP Diterima',
+    value: 'Verifikasi DP Diterima',
+    statuscode: 3,
+    color: '#FFEFB0',
+  },
+  {
+    label: 'Verifikasi DP Ditolak',
+    value: 'Verifikasi DP Ditolak',
+    statuscode: 1,
+    color: '#FFEFB0',
+  },
+  {
+    label: 'Pembayaran Pelunasan',
+    value: 'Pembayaran Pelunasan',
+    statuscode: 4,
+    color: '#FFEFB0',
+  },
+  {
+    label: 'Verifikasi Pelunasan Diterima',
+    value: 'Verifikasi Pelunasan Diterima',
+    statuscode: 6,
+    color: '#FFEFB0',
+  },
+  {
+    label: 'Verifikasi Pelunasan Ditolak',
+    value: 'Verifikasi Pelunasan Ditolak',
+    statuscode: 4,
+    color: '#FFEFB0',
+  },
 ]
 
 const SelectStatus = forwardRef(function SelectStatus(
@@ -32,23 +71,9 @@ const SelectStatus = forwardRef(function SelectStatus(
   )
 })
 
-const statusCode = (code) => {
-  switch (code) {
-    case 'Pembayaran DP' || 'Verifikasi DP Ditolak':
-      return 1
-      break
-    case 'Verifikasi DP Diterima':
-      return 3
-      break
-    case 'Pembayaran Pelunasan' || 'Verifikasi Pelunasan Ditolak':
-      return 4
-      break
-    case 'Verifikasi Pelunasan Diterima':
-      return 6
-      break
-    default:
-      break
-  }
+const getStatusCode = (status) => {
+  const found = dataStatus.find((i) => i.value === status)
+  return found.statuscode
 }
 
 export const UpdateStatusModal = ({ item }) => {
@@ -61,7 +86,7 @@ export const UpdateStatusModal = ({ item }) => {
     try {
       const documentRef = doc(db, 'payments', item.uid)
       const newData = {
-        statusCode: statusCode(status),
+        statusCode: getStatusCode(status),
         status: status,
       }
 
@@ -165,8 +190,9 @@ export const UpdateStatusModal = ({ item }) => {
   )
 }
 
-const dropdownStyle = {
+const dropdownStyle = () => ({
   item: {
+    // backgroundColor: ,
     '&[data-selected]': {
       '&': {
         backgroundColor: '#FFFFFF',
@@ -191,4 +217,4 @@ const dropdownStyle = {
     fontWeight: '500',
     height: '66px',
   },
-}
+})
