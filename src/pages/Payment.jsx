@@ -17,7 +17,7 @@ export const Payment = () => {
 
     return `${randomString}${timestamp}`
   }
-  // @ts-ignore
+
   const currentCategory = categoryList.find((item) => item.title.includes(id))
 
   const [active, setActive] = useState(0)
