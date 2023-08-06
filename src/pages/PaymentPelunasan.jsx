@@ -1,14 +1,15 @@
 import { Button, Group, Stepper } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { FirstStep } from '../components/payments/FirstStep'
-import { SecondStep } from '../components/payments/SecondStep'
-import { ThirdStep } from '../components/payments/ThirdStep'
+import { useLocation, useParams } from 'react-router-dom'
+import { FirstStep } from '../components/pelunasan/FirstStep'
+import { SecondStep } from '../components/pelunasan/SecondStep'
+import { ThirdStep } from '../components/pelunasan/ThirdStep'
 import { auth } from '../config/firebase'
 import categoryList from '../data/categoryList'
 
-export const Payment = () => {
+export const PaymentPelunasan = () => {
+  const { state } = useLocation()
   const { id } = useParams()
 
   const generateOrderId = () => {
@@ -24,24 +25,27 @@ export const Payment = () => {
 
   const form = useForm({
     initialValues: {
-      lokasi: '',
-      tanggal: [null, null],
-      metode: '',
-      orderId: generateOrderId(),
-      kategori: currentCategory.title,
-      kategoriImage: currentCategory.image[0],
-      max: currentCategory.max,
-      price: currentCategory.price / 2,
-      pelunasan: 0,
+      bukti: state?.bukti,
+      metode: state?.metode,
+      lokasi: state.lokasi,
+      tanggal: [state?.tanggal[0], state?.tanggal[1]],
+      metodePelunasan: '',
+      orderId: state?.uid,
+      kategori: state?.kategori,
+      kategoriImage: state?.kategoriImage,
+      max: state?.max,
+      price: state?.price*2,
       userName: auth.currentUser.displayName,
       userId: auth.currentUser.uid,
+      biayaTambahan: state?.biayaTambahan,
+      note: state?.note,
       // bukti: null,
     },
     validate: {
-      lokasi: (value) => (!value ? 'Mohon Diisi' : null),
+      // lokasi: (value) => (!value ? 'Mohon Diisi' : null),
       // tanggal: (value) =>
       //   value.some((element) => element === null) ? 'Mohon Diisi' : null,
-      metode: (value) => (!value ? 'Mohon Diisi' : null),
+      metodePelunasan: (value) => (!value ? 'Mohon Diisi' : null),
       // bukti: (value) => (!value ? 'Mohon Diisi' : null),
     },
   })
@@ -54,9 +58,9 @@ export const Payment = () => {
   const HeaderText = (i) => {
     switch (i) {
       case 0:
-        return 'PEMESANAN'
+        return 'PELUNASAN'
       case 1:
-        return 'PEMBAYARAN'
+        return 'PEMBAYARAN PELUNASAN'
       case 2:
         return 'SELESAI'
       default:
@@ -89,7 +93,7 @@ export const Payment = () => {
         <div className='max-w-xs m-auto mb-16 px-2'>
           <Stepper
             active={active}
-            // breakpoint='sm'
+            breakpoint='sm'
             color='#88CEEF'
             size='xl'>
             <Stepper.Step />

@@ -10,18 +10,20 @@ import { ProfileTemplate } from './components/templates/ProfileTemplate'
 import { auth, db } from './config/firebase'
 import { useStore } from './global/store'
 import { DetailCategory } from './pages/DetailCategory'
-// @ts-ignore
 import { EditProfile } from './pages/EditProfile'
 import { Gallery } from './pages/Gallery'
-import { HomePage } from './pages/HomePage'
+import { HomePage } from './pages/Homepage'
 import { Payment } from './pages/Payment'
 import { PhotoCategory } from './pages/PhotoCategory'
-import { SignIn } from './pages/SignIn'
-import { SignUp } from './pages/SignUp'
+import { SignIn } from './pages/Signin'
+import { SignUp } from './pages/Signup'
 import { DashPayments } from './pages/admin/DashPayments'
+import { Dashboard } from './pages/admin/Dashboard'
 import { UserNotification } from './pages/UserNotification'
 import { Orders } from './pages/Orders'
 import { AdminSignIn } from './pages/admin/AdminSignIn'
+import About from './pages/About'
+import { PaymentPelunasan } from './pages/PaymentPelunasan'
 
 function App() {
   const pending = useStore((state) => state.authRefreshing)
@@ -88,6 +90,11 @@ function App() {
         }
         visible={actionLoading}
         overlayBlur={2}
+        styles={{
+          overlay: {
+            position: 'fixed',
+          },
+        }}
       />
       <Routes>
         {/* main */}
@@ -103,6 +110,10 @@ function App() {
             element={<Gallery />}
           />
           <Route
+            path='/tentang'
+            element={<About />}
+          />
+          <Route
             path='/photo-category'
             element={<PhotoCategory />}
           />
@@ -114,6 +125,10 @@ function App() {
             <Route
               path='/photo-category/:id/payment'
               element={<Payment />}
+            />
+            <Route
+              path='/pelunasan'
+              element={<PaymentPelunasan />}
             />
           </Route>
         </Route>
@@ -166,6 +181,10 @@ function App() {
             element={<AdminTemplate />}>
             <Route
               index
+              element={<Dashboard />}
+            />
+            <Route
+              path='/admin/payments'
               element={<DashPayments />}
             />
           </Route>

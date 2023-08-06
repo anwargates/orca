@@ -2,9 +2,9 @@ import { useDisclosure } from '@mantine/hooks'
 import { signOut } from 'firebase/auth'
 import React from 'react'
 import { Link, Outlet, useNavigate } from 'react-router-dom'
-// @ts-ignore
 import Home from '../../assets/home.svg'
-// @ts-ignore
+import Dashboard from '../../assets/dashboard.svg'
+import Payments from '../../assets/payments.svg'
 import Logout from '../../assets/logout.svg'
 import { auth } from '../../config/firebase'
 import { useStore } from '../../global/store'
@@ -26,17 +26,19 @@ export const AdminTemplate = () => {
   return (
     <>
       {/* PROFILE PICTURE UPLOAD MODAL */}
-      <UploadProfilePicModal
+      {/* <UploadProfilePicModal
         opened={showUploadModal}
         modalHandler={toggleUploadModal}
-      />
+      /> */}
 
       {/* SIDEBAR */}
-      <nav className='absolute py-8 flex flex-col justify-between items-center top-0 left-0 bg-primary -translate-x-52 lg:-translate-x-0 lg:w-56 h-full z-10 transition-all'>
+      <nav className='fixed z-20 py-8 flex flex-col justify-between items-center top-0 left-0 bg-primary -translate-x-52 lg:-translate-x-0 lg:w-56 h-full transition-all'>
         {/* TOP SECTION */}
         <div className='w-full flex flex-col items-center justify-start gap-7'>
           {/* SIDEBAR HEADER */}
-          <div className='font-bold text-2xl text-center text-white'>
+          <div
+            onClick={() => navigate('/')}
+            className='hover:cursor-pointer font-bold text-2xl text-center text-white'>
             Orcaaaa
           </div>
 
@@ -47,28 +49,28 @@ export const AdminTemplate = () => {
           <ul className='flex flex-col list-none gap-11'>
             <li>
               <Link
-                to='/'
-                className='flex text-white font-semibold gap-12'>
+                to='/admin'
+                className='flex text-white font-semibold gap-4'>
                 <img
-                  src={Home}
+                  src={Dashboard}
                   alt=''
                   className='w-8'
                 />
-                <span className='text-2xl'>Home</span>
+                <span className='text-2xl'>Dashboard</span>
               </Link>
             </li>
-            {/* <li>
+            <li>
               <Link
-                to='/profile'
-                className='flex text-white font-semibold gap-12'>
+                to='/admin/payments'
+                className='flex text-white font-semibold gap-4'>
                 <img
-                  src={Profile}
+                  src={Payments}
                   alt=''
                   className='w-8'
                 />
-                <span className='text-2xl'>Profil</span>
+                <span className='text-2xl'>Payments</span>
               </Link>
-            </li> */}
+            </li>
           </ul>
         </div>
 
@@ -85,7 +87,7 @@ export const AdminTemplate = () => {
       </nav>
 
       {/* TOP BAR */}
-      <div className='absolute top-0 w-full flex items-center justify-center h-24 bg-[#68B0D1] lg:pl-56'>
+      <div className='fixed z-10 top-0 w-full flex items-center justify-center h-24 bg-[#68B0D1] lg:pl-56'>
         <h1 className='text-white font-bold text-3xl'>Konfirmasi Pembayaran</h1>
       </div>
 

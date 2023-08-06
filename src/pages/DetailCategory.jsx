@@ -38,8 +38,8 @@ export const DetailCategory = () => {
     <>
       {console.log(currentCategory)}
 
-      <div className='mt-40'>
-        <div className='rounded-full bg-primary text-white font-bold text-5xl py-11 md:w-[717px] inset-x-0 mx-auto capitalize'>
+      <div className='mt-20'>
+        <div className='rounded-full bg-primary text-white font-bold text-3xl lg:text-5xl py-11 md:w-[717px] inset-x-0 mx-auto capitalize'>
           {currentCategory.title}
         </div>
       </div>
@@ -65,9 +65,9 @@ export const DetailCategory = () => {
             </Link>
           </div>
           <div className='lg:w-80 w-full flex-1 px-4 mb-20'>
-            <DetailSlider content={currentCategory.image} />
+            <DetailSlider content={currentCategory} />
           </div>
-          <div className='flex flex-col flex-1 justify-between pb-2 pt-3 px-16 mb-20'>
+          <div className='flex flex-col flex-1 justify-between pb-2 pt-3 px-4 md:px-16 mb-20'>
             <div className='flex flex-col'>
               <div className='flex flex-col gap-5'>
                 <div className='flex w-full text-left font-bold gap-2 items-end'>

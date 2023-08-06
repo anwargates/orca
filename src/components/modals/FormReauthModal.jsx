@@ -1,3 +1,4 @@
+import React from 'react'
 import { Modal, Notification } from '@mantine/core'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -13,6 +14,7 @@ import { BsCheckCircleFill } from 'react-icons/bs'
 import { useDisclosure } from '@mantine/hooks'
 import { doc } from 'firebase/firestore'
 import { reauthStore } from '../../global/store'
+import { BeatLoader } from 'react-spinners'
 
 export const FormReauthModal = ({
   opened,

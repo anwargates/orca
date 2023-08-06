@@ -28,7 +28,7 @@
     text-decoration: inherit;
   } */
   a:hover {
-    color: #88ceef;
+    color: #ffffff;
   }
 
   body {
@@ -131,5 +131,20 @@
 
   .testimony-dots li.slick-active {
     @apply w-10 bg-blue;
+  }
+
+  .custom-table .ant-table-thead > tr > th {
+    background-color: #88CEEF;
+    color: #ffffff;
+  }
+
+  .custom-table .ant-pagination-item-active a {
+    background-color: #88CEEF !important;
+    color: #ffffff;
+  }
+
+  .custom-table .ant-pagination-item-active a:hover {
+    background-color: #88CEEF !important;
+    color: #ffffff;
   }
 }

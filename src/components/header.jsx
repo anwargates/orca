@@ -1,4 +1,4 @@
-import { Avatar, Burger } from '@mantine/core'
+import { Avatar, Burger, Drawer } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { onAuthStateChanged } from 'firebase/auth'
 import React, { useEffect, useState } from 'react'
@@ -14,7 +14,7 @@ import { useStore } from '../global/store'
 // HEADER NAVBAR COMPONENT
 export const Header = () => {
   // const [nav, setNav] = useState(false)
-  const [nav, { toggle }] = useDisclosure(false)
+  const [nav, { toggle, close }] = useDisclosure(false)
   const { isLoggedIn, setLoggedIn, isAdmin } = useStore()
   // const pending = useStore((state) => state.authRefreshing)
   // const isLoggedIn = useStore((state) => state.isLoggedIn)
@@ -44,7 +44,7 @@ export const Header = () => {
   // }
 
   return (
-    <header className='absolute w-full top-0 z-50'>
+    <header className='w-full z-50'>
       <nav className='bg-primary'>
         <div className='default-container flex h-[10vh] p-6 sm:px-16 sm:py-6 items-center justify-between gap-8'>
           {/* LOGO */}
@@ -92,22 +92,76 @@ export const Header = () => {
             </div>
 
             {/* NAV RIGHT BUTTON ON MOBILE */}
-            {/* <div
-              onClick={handleNav}
-              className='block text-white lg:hidden'>
-              {!nav ? (
-                <AiOutlineMenu size={20} />
-              ) : (
-                <AiOutlineClose size={20} />
-              )}
-            </div> */}
-
             <Burger
               className='block lg:hidden'
               color='white'
               opened={nav}
               onClick={toggle}
             />
+            <Drawer
+              opened={nav}
+              onClose={close}
+              position='right'
+              size='xs'>
+              <div className='font-bold'>
+                <ul className='flex flex-col items-end justify-between gap-8'>
+                  <li className='header-link-button'>
+                    <Link
+                      onClick={close}
+                      className='hover:text-gray-200'
+                      to='/'>
+                      Home
+                    </Link>
+                  </li>
+                  <li className='header-link-button'>
+                    <Link
+                      onClick={close}
+                      className='hover:text-gray-200'
+                      to='/photo-category'>
+                      Pesan Sekarang
+                    </Link>
+                  </li>
+                  <li className='header-link-button'>
+                    <Link
+                      onClick={close}
+                      className='hover:text-gray-200'
+                      to='/gallery'>
+                      Gallery
+                    </Link>
+                  </li>
+                  <li className='header-link-button'>
+                    <Link
+                      onClick={close}
+                      className='hover:text-gray-200'
+                      to='/tentang'>
+                      About Us
+                    </Link>
+                  </li>
+                  {isLoggedIn ? (
+                  <li className='header-link-button'>
+                    <Link
+                      to={isAdmin ? '/admin' : '/profile'}
+                      className='flex items-center gap-2'>
+                      <Avatar
+                        src={auth?.currentUser?.photoURL ?? ProfilePlaceholder}
+                        alt='profile'
+                        radius='xl'
+                        size='6vh'
+                      />
+                    </Link>
+                  </li>
+                  ) : ( // if not signed in the show login button
+                  <li className='flex items-center gap-4'>
+                    <Link to='/signin'>
+                      <button className='w-28 h-12 bg-white text-blue font-bold rounded-lg'>
+                        Log In
+                      </button>
+                    </Link>
+                  </li>
+                  )}
+                </ul>
+              </div>
+            </Drawer>
 
             {/* NAV RIGHT BUTTON ON DESKTOP */}
             {/*  check if still refreshing */}
@@ -118,13 +172,8 @@ export const Header = () => {
             ) : // if signed in the show profile picture
             isLoggedIn ? (
               <Link
-                to={isAdmin?'/admin':'/profile'}
+                to={isAdmin ? '/admin' : '/profile'}
                 className='hidden lg:flex items-center gap-2'>
-                {/* <img
-                  src={auth?.currentUser?.photoURL ?? ProfilePlaceholder}
-                  alt='profile'
-                  className='w-auto h-[6vh] rounded-full'
-                /> */}
                 <Avatar
                   src={auth?.currentUser?.photoURL ?? ProfilePlaceholder}
                   alt='profile'
@@ -135,9 +184,6 @@ export const Header = () => {
             ) : (
               // if not signed in the show login button
               <div className='hidden lg:flex items-center gap-4'>
-                {/* <Link to='/signup'>
-                  <button className='w-28 h-12 bg-blue text-white font-bold'>SignUp</button>
-                </Link> */}
                 <Link to='/signin'>
                   <button className='w-28 h-12 bg-white text-blue font-bold rounded-lg'>
                     Log In

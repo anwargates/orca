@@ -3,6 +3,10 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 
 export const ThirdStep = ({ form, selected, handler }) => {
+  const formatTimestamp = (timestamp) => {
+    const date = moment.unix(timestamp?.seconds)
+    return date.format('Do MMMM YYYY')
+  }
   return (
     <>
       <div className='px-10 xl:px-60'>
@@ -17,7 +21,7 @@ export const ThirdStep = ({ form, selected, handler }) => {
           <table className='table w-full'>
             <thead className='table-header-group border-b-2 h-16 border-black'>
               <tr className='table-row font-semibold'>
-                <td className='table-cell'>No. Pembayaran</td>
+                <td className='table-cell'>No. Pesanan</td>
                 <td className='table-cell'>Tanggal</td>
                 <td className='table-cell'>Total</td>
                 <td className='table-cell'>Metode Pembayaran</td>
@@ -27,12 +31,12 @@ export const ThirdStep = ({ form, selected, handler }) => {
               <tr className='table-row font-semibold text-lg'>
                 <td className='table-cell'>{form.values.orderId}</td>
                 <td className='table-cell'>
-                  {moment(form.values.tanggal[0]).format('Do MMMM YYYY') +
+                  {formatTimestamp(form.values.tanggal[0]) +
                     ' - ' +
-                    moment(form.values.tanggal[1]).format('Do MMMM YYYY')}
+                    formatTimestamp(form.values.tanggal[1])}
                 </td>
-                <td className='table-cell'>{form.values.price}.000</td>
-                <td className='table-cell'>{form.values.metode}</td>
+                <td className='table-cell'>{form.values.pelunasan?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</td>
+                <td className='table-cell'>{form.values.metodePelunasan}</td>
               </tr>
             </tbody>
           </table>

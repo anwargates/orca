@@ -1,4 +1,4 @@
-import { Group, Modal, NativeSelect, Select, Text } from '@mantine/core'
+import { Group, Input, Modal, NativeSelect, Select, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { ref as dbRef, push, set } from 'firebase/database'
 import { doc, updateDoc } from 'firebase/firestore'
@@ -73,12 +73,15 @@ const SelectStatus = forwardRef(function SelectStatus(
 
 const getStatusCode = (status) => {
   const found = dataStatus.find((i) => i.value === status)
-  return found.statuscode
+  return found?.statuscode??1
 }
 
 export const UpdateStatusModal = ({ item }) => {
   const [opened, { open, close }] = useDisclosure(false)
   const [status, setStatus] = useState(item.status)
+  const [note, setNote] = useState('')
+  const [biayaTambahan, setBiayaTambahan] = useState(0)
+  const [linkGoogleDrive, setLinkGoogleDrive] = useState('')
   const { actionLoading, setActionLoading } = useStore()
 
   const handleUpdateStatus = async () => {
@@ -88,6 +91,9 @@ export const UpdateStatusModal = ({ item }) => {
       const newData = {
         statusCode: getStatusCode(status),
         status: status,
+        note: note,
+        biayaTambahan: biayaTambahan,
+        linkGoogleDrive: linkGoogleDrive,
       }
 
       await updateDoc(documentRef, newData)
@@ -133,7 +139,7 @@ export const UpdateStatusModal = ({ item }) => {
     <>
       <div
         onClick={open}
-        className='bg-[#68B984] w-32 h-8 text-xs text-white rounded-md flex justify-center items-center hover:cursor-pointer m-auto'>
+        className='bg-primary w-32 h-8 text-xs text-white rounded-md flex justify-center items-center hover:cursor-pointer m-auto'>
         Update Status
       </div>
       <Modal.Root
@@ -153,23 +159,46 @@ export const UpdateStatusModal = ({ item }) => {
             />
           </Modal.Header>
           <Modal.Body>
-            <Select
-              data={dataStatus}
-              radius='md'
-              value={status}
-              itemComponent={SelectStatus}
-              onChange={handleChange}
-              maxDropdownHeight={400}
-              rightSection={<BsChevronDown size='1rem' />}
-              rightSectionWidth={30}
-              // @ts-ignore
-              styles={dropdownStyle}
-              transitionProps={{
-                transition: 'pop-top-left',
-                duration: 80,
-                timingFunction: 'ease',
-              }}
-            />
+            <div className='flex flex-col gap-4'>
+              <Select
+                data={dataStatus}
+                radius='md'
+                value={status}
+                itemComponent={SelectStatus}
+                onChange={handleChange}
+                maxDropdownHeight={400}
+                rightSection={<BsChevronDown size='1rem' />}
+                rightSectionWidth={30}
+                styles={dropdownStyle}
+                transitionProps={{
+                  transition: 'pop-top-left',
+                  duration: 80,
+                  timingFunction: 'ease',
+                }}
+              />
+              {getStatusCode(status) === 4 && (
+                <>
+                  <Input
+                    placeholder='Note'
+                    value={note}
+                    onChange={(v) => setNote(v.currentTarget.value)}
+                  />
+                  <Input
+                    placeholder='Biaya Tambahan'
+                    type='number'
+                    value={biayaTambahan}
+                    onChange={(v) => setBiayaTambahan(v.currentTarget.value)}
+                  />
+                </>
+              )}
+              {getStatusCode(status) === 6 && (
+                <Input
+                  placeholder='Link Google Drive'
+                  value={linkGoogleDrive}
+                  onChange={(v) => setLinkGoogleDrive(v.currentTarget.value)}
+                />
+              )}
+            </div>
             <div className='my-4 w-full border border-neutral-200' />
             <div className='flex justify-around'>
               <button

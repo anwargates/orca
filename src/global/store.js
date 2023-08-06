@@ -1,6 +1,8 @@
 import { create } from 'zustand'
 
 export const useStore = create((set) => ({
+  userData: {},
+  setUserData: (user) => set(() => ({ userData: user })),
   isLoggedIn: false,
   setLoggedIn: (login) => set(() => ({ isLoggedIn: login })),
   isAdmin: false,

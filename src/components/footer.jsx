@@ -5,20 +5,20 @@ import { BiCopyright } from 'react-icons/bi'
 export const Footer = () => {
   return (
     <footer className='w-full'>
-      <div className='bg-primary h-[20vh]'>
+      <div className='bg-primary min-h-[20vh]'>
         <div className='default-container flex items-stretch justify-between flex-wrap py-8 px-20 h-full text-white text-left'>
-          <div className='flex items-stretch justify-center lg:justify-start w-full lg:w-2/4 '>
-            <div className='flex'>
+          <div className='flex flex-col sm:flex-row items-stretch justify-center lg:justify-start w-full lg:w-2/4 '>
+            {/* <div className='flex flex-col sm:flex-row'> */}
               <img
                 src={LogoOrca}
                 alt='logo orca'
-                className='w-28 p-4'
+                className='w-28 p-4 m-auto'
               />
               <div className='flex flex-col p-2 items-center text-center justify-center'>
                 <h1 className='font-extrabold text-2xl'>ORCAAA PHOTOWORKS</h1>
-                <p>Lets make a beatiful memory</p>
+                <p>Lets make a beautiful memory</p>
               </div>
-            </div>
+            {/* </div> */}
           </div>
           <div className='lg:flex gap-6 items-stretch justify-center text-sm hidden w-2/4'>
             <div className='flex flex-col p-2'>
@@ -47,7 +47,7 @@ export const Footer = () => {
           </div>
         </div>
       </div>
-      <div className='bg-blueSecondary h-[5vh]'>
+      <div className='bg-blueSecondary min-h-[5vh]'>
         <div className='default-container flex items-center gap-1 py-2 px-20 h-full text-white'>
           <BiCopyright />
           <p className='text-left text-sm sm:text-base'>2022 Orcaaa. All rights reserved.</p>

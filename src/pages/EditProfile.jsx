@@ -167,7 +167,7 @@ export const EditProfile = () => {
         overlayBlur={2}
       />
 
-      <div className="flex items-start justify-center">
+      <div className='flex items-start justify-center'>
         <div className='container grid grid-cols-1 lg:grid-cols-3 items-start justify-center w-full lg:max-w-5xl'>
           {/* ORCA LOGO */}
           <div className='flex p-8'>
@@ -178,7 +178,7 @@ export const EditProfile = () => {
             />
           </div>
           {/* FORM */}
-          <div className='col-span-2 relative flex items-center justify-center p-8'>
+          <div className='col-span-2 relative flex items-center justify-center p-2'>
             <LoadingOverlay
               loader={
                 <Loader

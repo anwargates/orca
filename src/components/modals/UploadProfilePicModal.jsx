@@ -1,3 +1,4 @@
+import React from 'react'
 import {
   Group,
   Loader,
@@ -31,8 +32,10 @@ import { BeatLoader } from 'react-spinners'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { v4 } from 'uuid'
 import { Dropzone, IMAGE_MIME_TYPE } from '@mantine/dropzone'
+import { modals } from '@mantine/modals'
+import { notifications } from '@mantine/notifications'
 
-export const UploadProfilePicModal = ({ opened, modalHandler }) => {
+export const UploadProfilePicModal = () => {
   const fileInputRef = useRef(null)
   const [pending, setPending] = useState(false)
   const [isNotify, toggleNotify] = useDisclosure(false)
@@ -48,11 +51,6 @@ export const UploadProfilePicModal = ({ opened, modalHandler }) => {
     handleSubmit,
     formState: { errors },
   } = useForm()
-
-  // HANDLE ON MODAL CLOSE
-  const handleClose = () => {
-    modalHandler.close()
-  }
 
   // HANDLE FILE CHANGE
   const handleChange = (selectedFiles) => {
@@ -71,12 +69,24 @@ export const UploadProfilePicModal = ({ opened, modalHandler }) => {
     // const imageRef = ref(storage, `profilePics/${file.name + v4()}`)
     const imageRef = ref(storage, `profilePics/${v4()}`)
     uploadBytes(imageRef, file).then((res) => {
-      getDownloadURL(res.ref).then((url) => {
-        updateProfile(auth.currentUser, { photoURL: url })
-        toggleNotify.open()
-        setPending(false)
-        handleClose()
-      })
+      getDownloadURL(res.ref)
+        .then((url) => {
+          updateProfile(auth.currentUser, { photoURL: url })
+          setPending(false)
+          return
+        })
+        .then(() => {
+          notifications.show({
+            title: 'Profile Picture',
+            message: 'Profile Picture sudah diperbarui',
+            color: 'teal',
+            icon: <BsCheckCircleFill size='1.1rem' />,
+          })
+          modals.closeAll()
+        })
+        .then(() => {
+          window.location.reload()
+        })
     })
   }
 
@@ -98,71 +108,63 @@ export const UploadProfilePicModal = ({ opened, modalHandler }) => {
       </Notification>
 
       {/* MODAL */}
-      <Modal
-        opened={opened}
-        onClose={handleClose}
-        className='relative'
-        title='Upload Foto Profile'
-        centered>
-        {/* LOADING OVERLAY */}
-        <LoadingOverlay
-          loader={
-            <Loader
-              variant='dots'
-              size={80}
-            />
-          }
-          visible={pending}
-          overlayBlur={2}
-        />
+      {/* LOADING OVERLAY */}
+      <LoadingOverlay
+        loader={
+          <Loader
+            variant='dots'
+            size={80}
+          />
+        }
+        visible={pending}
+        overlayBlur={2}
+      />
 
-        <Dropzone
-          onDrop={handleChange}
-          onReject={(files) => console.log('rejected files', files)}
-          // maxSize={3 * 1024 ** 2}
-          accept={IMAGE_MIME_TYPE}
-          // loading={true}
-          maxFiles={1}>
-          <Group className='flex justify-center items-center gap-6 h-52'>
-            <Dropzone.Accept>
-              <BsCloudUpload size={80} />
-            </Dropzone.Accept>
-            <Dropzone.Reject>
-              <BsX size={80} />
-            </Dropzone.Reject>
-            <Dropzone.Idle>
-              {file ? (
-                <>
-                  <div className='flex flex-col justify-center items-center'>
-                    <img
-                      src={URL.createObjectURL(file)}
-                      className='w-40 h-40 mb-2'
-                    />
-                    <span className='text-xl inline'>
-                      Click upload if ready
-                    </span>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className='flex flex-col justify-center items-center'>
-                    <BsImage
-                      className='mb-10'
-                      size={80}
-                    />
-                    <span className='text-xl inline'>
-                      Drag images here or click to select files
-                    </span>
-                    <span className='text-sm text-slate-500 inline'>
-                      File should not exceed 5mb
-                    </span>
-                  </div>
-                </>
-              )}
-            </Dropzone.Idle>
-          </Group>
-        </Dropzone>
-        {/* <div
+      <Dropzone
+        onDrop={handleChange}
+        onReject={(files) => console.log('rejected files', files)}
+        // maxSize={3 * 1024 ** 2}
+        accept={IMAGE_MIME_TYPE}
+        // loading={true}
+        maxFiles={1}>
+        <Group className='flex justify-center items-center gap-6 h-52'>
+          <Dropzone.Accept>
+            <BsCloudUpload size={80} />
+          </Dropzone.Accept>
+          <Dropzone.Reject>
+            <BsX size={80} />
+          </Dropzone.Reject>
+          <Dropzone.Idle>
+            {file ? (
+              <>
+                <div className='flex flex-col justify-center items-center'>
+                  <img
+                    src={URL.createObjectURL(file)}
+                    className='w-40 h-40 mb-2'
+                  />
+                  <span className='text-xl inline'>Click upload if ready</span>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className='flex flex-col justify-center items-center'>
+                  <BsImage
+                    className='mb-10'
+                    size={80}
+                  />
+                  <span className='text-xl inline'>
+                    Drag images here or click to select files
+                  </span>
+                  <span className='text-sm text-slate-500 inline'>
+                    File should not exceed 5mb
+                  </span>
+                </div>
+              </>
+            )}
+          </Dropzone.Idle>
+        </Group>
+      </Dropzone>
+      {/* <div
             className='w-full h-52 flex justify-center items-center bg-white cursor-pointer caret-transparent p-2 rounded-2xl border-gray-500 border'
             onClick={() => {
               fileInputRef.current.click()
@@ -184,22 +186,22 @@ export const UploadProfilePicModal = ({ opened, modalHandler }) => {
             style={{ display: 'none' }}
             onChange={handleChange}
           /> */}
-        <button
-          className='flex justify-center items-center bg-primary w-full mt-6 h-6 p-6 rounded-xl text-white'
-          disabled={pending ? true : false}
-          onClick={handleUploadProfilePic}>
-          {pending ? (
-            <BeatLoader
-              size={16}
-              color='#ffffff'
-            />
-          ) : (
-            'Upload'
-          )}
-        </button>
+      <button
+        className='flex justify-center items-center bg-primary w-full mt-6 h-6 p-6 rounded-xl text-white'
+        disabled={pending ? true : false}
+        onClick={handleUploadProfilePic}>
+        {pending ? (
+          <BeatLoader
+            size={16}
+            color='#ffffff'
+          />
+        ) : (
+          'Upload'
+        )}
+      </button>
 
-        {/* SHOW LOADING ANIMATION */}
-        {/* {pending ? (
+      {/* SHOW LOADING ANIMATION */}
+      {/* {pending ? (
             <div className='btn-submit flex items-center justify-center'>
               <BeatLoader color='#ffffff' />
             </div>
@@ -211,7 +213,6 @@ export const UploadProfilePicModal = ({ opened, modalHandler }) => {
             />
           )}
         </form> */}
-      </Modal>
     </>
   )
 }

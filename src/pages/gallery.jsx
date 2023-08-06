@@ -54,7 +54,7 @@ export const Gallery = () => {
 
   return (
     <>
-      <section className='flex mt-[10vh]'>
+      <section className='flex'>
         <div className='container max-w-7xl mx-auto px-8 py-12'>
           <h2 className='text-3xl font-bold sm:text-5xl mb-12'>
             GALLERY PORTOFOLIO

@@ -15,65 +15,127 @@ import { UpdateStatusModal } from '../../components/modals/UpdateStatusModal'
 import { Group, Loader, LoadingOverlay, Pagination } from '@mantine/core'
 import { usePagination } from '@mantine/hooks'
 import { useStore } from '../../global/store'
+import { Table } from 'antd'
+
+const columns = [
+  {
+    title: 'Kode Pembayaran',
+    dataIndex: 'uid',
+    key: 'uid',
+  },
+  {
+    title: 'Metode DP',
+    dataIndex: 'metode',
+    key: 'metode',
+  },
+  {
+    title: 'Metode Pelunasan',
+    dataIndex: 'metodePelunasan',
+    key: 'metodePelunasan',
+  },
+  {
+    title: 'Nama Lengkap',
+    dataIndex: 'userName',
+    key: 'userName',
+  },
+  {
+    title: 'Kategori Foto',
+    dataIndex: 'kategori',
+    key: 'kategori',
+    render: (text) => <div className='capitalize'>{text}</div>,
+  },
+  {
+    title: 'Pembayaran DP',
+    dataIndex: 'price',
+    key: 'price',
+    render: (text) => <div>{text}.000</div>,
+  },
+  {
+    title: 'Biaya Tambahan',
+    dataIndex: 'biayaTambahan',
+    key: 'biayaTambahan',
+    render: (text) => <div>{text?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</div>,
+  },
+  {
+    title: 'Pembayaran Pelunasan',
+    dataIndex: 'pelunasan',
+    key: 'pelunasan',
+    render: (text) => (
+      <div>{text?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</div>
+    ),
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
+    render: (text) => (
+      <div>{text}</div>
+    ),
+  },
+  {
+    title: 'Detail Pesanan',
+    key: 'detail',
+    // fixed: 'right',
+    width: 150,
+    render: (_, record) => (
+      <div>
+        <PaymentProofModal
+          url={record.bukti}
+          urlPelunasan={record.buktiPelunasan}
+        />
+      </div>
+    ),
+  },
+  {
+    title: 'Status Pembayaran',
+    key: 'status',
+    // fixed: 'right',
+    width: 150,
+    render: (_, record) => (
+      <div>
+        <UpdateStatusModal item={record} />
+      </div>
+    ),
+  },
+  {
+    title: 'Aksi',
+    key: 'aksi',
+    // fixed: 'right',
+    width: 80,
+    render: (_, record) => (
+      <div>
+        <div
+          onClick={() => {
+            const linkGrupWhatsapp =
+              'https%3A%2F%2Fchat.whatsapp.com%2FIFSL0IwH7MfE5RkRfQPGo0'
+            const encodedMessage = `Haii%2C%20${record.userName}%21%0A%0ABerikut%20invoice%20dari%20berlangganan%20kelas%20${record.kategori}%20di%20Kursus%20Editing%20Ruang%20Edit%20dengan%20nomor%20transaksi%20${record.uid}%0A%0AUntuk%20info%20kelas%20lebih%20lengkap%2C%20silahkan%20bergabung%20ke%20grup%20komunitas%20Ruang%20Edit%20%3A%20%0A${linkGrupWhatsapp}%0A%0ATerimakasih%21
+            `
+            // window.open(
+            //   `https://api.whatsapp.com/send?phone=${item.nomorTelepon}&text=${encodedMessage}`
+            // )
+            window.open(
+              `https://api.whatsapp.com/send?phone=6285892716319&text=${encodedMessage}`
+            )
+          }}
+          className='hover:cursor-pointer rounded-full'>
+          <IoLogoWhatsapp className='text-green-300 text-3xl m-auto' />
+        </div>
+      </div>
+    ),
+  },
+]
 
 export const DashPayments = () => {
   const [payments, setPayments] = useState([])
-  const [totalItems, setTotalItems] = useState(0)
   const [pending, setPending] = useState(true)
-  // const [currentPage, setCurrentPage] = useState(1)
-
-  const itemsPerPage = 5
 
   const paymentsRef = collection(db, 'payments')
-  const paymentsQuery = query(
-    paymentsRef,
-    orderBy('timestamp', 'desc'),
-    limit(itemsPerPage)
-  )
-
-  // Calculate the total number of pages
-  const totalPages = Math.ceil(totalItems / itemsPerPage)
-
-  const pagination = usePagination({ total: totalPages })
-
-  const handlePageChange = (page) => {
-    pagination.setPage(page)
-  }
-
-  // const getPayments = async () => {
-  //   const data = []
-  //   await getDocs(collection(db, 'payments')).then((res) => {
-  //     console.log(res)
-  //     res.forEach((doc) => {
-  //       console.log(doc.data())
-  //       data.push({ uid: doc.id, ...doc.data() })
-  //     })
-  //   })
-  //   console.log(data)
-  //   // @ts-ignore
-  //   setPayments(data)
-  // }
+  const paymentsQuery = query(paymentsRef, orderBy('timestamp', 'desc'))
 
   const getPayments = async () => {
     setPending(true)
-    const snapshot = await getCountFromServer(paymentsRef)
-    setTotalItems(snapshot.data().count)
     try {
-      let newQuery = paymentsQuery
-
-      if (pagination.active > 1) {
-        const lastVisiblePayment = payments[payments.length - 1]
-        const lastVisibleTimestamp = lastVisiblePayment.timestamp
-
-        newQuery = query(
-          paymentsRef,
-          orderBy('timestamp', 'desc'),
-          startAfter(lastVisibleTimestamp),
-          limit(itemsPerPage)
-        )
-      }
-
-      const snapshot = await getDocs(newQuery)
+      const snapshot = await getDocs(paymentsQuery)
       const paymentData = snapshot.docs.map((doc) => ({
         uid: doc.id,
         ...doc.data(),
@@ -101,7 +163,7 @@ export const DashPayments = () => {
 
   useEffect(() => {
     getPayments()
-  }, [pagination.active])
+  }, [])
 
   return (
     <>
@@ -120,7 +182,19 @@ export const DashPayments = () => {
           Konfirmasi Pembayaran
         </div>
         <div className='border w-full border-black'></div>
-        <div className='table w-full ...'>
+        <Table
+          scroll={{ x: '1440px' }}
+          loading={pending}
+          pagination={{
+            position: ['bottomRight'],
+          }}
+          dataSource={payments}
+          columns={columns}
+          className='custom-table text-sm font-medium'
+          rowKey='uid'
+          // onRow={rowProps}
+        />
+        {/* <div className='table w-full ...'>
           <div className='table-header-group bg-primary text-white h-24 text-center font-bold text-xs'>
             <div className='table-row'>
               <div className='table-cell text-center align-middle'>
@@ -234,7 +308,7 @@ export const DashPayments = () => {
             <Pagination.Items />
             <Pagination.Next />
           </Group>
-        </Pagination.Root>
+        </Pagination.Root> */}
       </div>
     </>
   )

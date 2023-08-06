@@ -5,6 +5,8 @@ import { DatePickerInput } from '@mantine/dates'
 import categoryList from '../../data/categoryList'
 import { useNavigate } from 'react-router-dom'
 import { dataPayment } from '../../data/paymentMethods'
+import { Input } from '@mantine/core'
+import moment from 'moment'
 
 const dataLokasi = [
   {
@@ -25,32 +27,8 @@ const dataLokasi = [
     value: 'Sudirman',
   },
   {
-    label: 'Taman Langsat',
-    value: 'Taman Langsat',
-  },
-  {
-    label: 'Taman Tabebuya',
-    value: 'Taman Tabebuya',
-  },
-  {
-    label: 'Taman Bambu',
-    value: 'Taman Bambu',
-  },
-  {
-    label: 'MRT Lebak Bulus',
-    value: 'MRT Lebak Bulus',
-  },
-  {
-    label: 'MRT Fatmawati',
-    value: 'MRT Fatmawati',
-  },
-  {
-    label: 'MRT Dukuh Atas',
-    value: 'MRT Dukuh Atas',
-  },
-  {
-    label: 'Bni City',
-    value: 'Bni City',
+    label: 'GBK',
+    value: 'GBK',
   },
   {
     label: 'Lainnya...',
@@ -120,10 +98,11 @@ export const FirstStep = ({ form, selected, handler }) => {
   const handleNext = () => {
     const validate = form.validate()
     // console.log(validate)
-    form.setFieldValue('tanggal', date)
+    // form.setFieldValue('tanggal', date)
     // form.setFieldValue('orderId', generateOrderId())
     // form.setFieldValue('max', currentCategory.max)
     // form.setFieldValue('price', currentCategory.max)
+    form.setFieldValue('pelunasan', form.values.price * 1000 + parseInt(form.values.biayaTambahan))
     console.log(Object.keys(validate.errors).length)
     if (Object.keys(validate.errors).length === 0) nextStep()
   }
@@ -133,13 +112,18 @@ export const FirstStep = ({ form, selected, handler }) => {
     item.title.includes(selected)
   )
 
+  const formatTimestamp = (timestamp) => {
+    const date = moment.unix(timestamp?.seconds)
+    return date.format('Do MMMM YYYY')
+  }
+
   return (
     <div className='grid gap-20 sm:px-6 lg:px-32'>
       {/* {console.log(form.values)} */}
-      <div className='grid md:grid-cols-4 md:grid-rows-1 gap-2 rounded-3xl bg-[#88CEEF80] p-8 md:py-11 md:px-20'>
+      <div className='grid md:grid-cols-3 md:grid-rows-1 gap-2 rounded-3xl bg-[#88CEEF80] p-8 md:py-11 md:px-20'>
         <div className='md:col-span-2 md:col-start-2 md:row-start-1 text-left'>
-          <h1 className='font-bold text-3xl capitalize'>{selected?.title}</h1>
-          <h2 className='mb-4 text-xl'>{selected?.price}k/Jam</h2>
+          <h1 className='font-bold text-3xl capitalize'>{form.values?.kategori}</h1>
+          <h2 className='mb-4 text-xl'>{form.values?.price*2}k/Jam</h2>
           <p className='text-xs'>
             *Harga diatas sesuai dengan ketentuan yang berlaku, apabila ada
             penambahan jumlah orang dan perubahan lokasi maka harga akan
@@ -149,65 +133,30 @@ export const FirstStep = ({ form, selected, handler }) => {
         <div className='md:col-start-1 md:row-start-1'>
           <img
             className='w-48 h-40 object-cover m-auto rounded-lg'
-            src={selected?.image[0] ?? ''}
+            src={form.values?.kategoriImage}
             alt=''
           />
-        </div>
-        <div className='md:col-start-4 md:row-start-1 flex items-center justify-center'>
-          <button
-            onClick={() => navigate('/photo-category', { replace: true })}
-            className='flex rounded-lg bg-white
-             text-primary items-center justify-center w-60 h-20 font-semibold text-2xl'>
-            Ubah Pesanan
-          </button>
         </div>
       </div>
 
       {/* DROPDOWN SECTION */}
       <div className='grid md:grid-cols-2 gap-10 md:gap-20 px-2 md:px-0'>
         <div className='flex flex-col gap-2 md:gap-12 text-left text-xs'>
-          <Select
-            label='Titik Lokasi Pemotretan'
-            placeholder='Pilih Lokasi'
-            defaultValue='Blok M'
-            itemComponent={SelectLokasi}
-            data={dataLokasi}
-            radius='md'
-            maxDropdownHeight={400}
-            rightSection={<BsChevronDown size='1rem' />}
-            rightSectionWidth={30}
-            // @ts-ignore
-            styles={dropdownStyle}
-            transitionProps={{
-              transition: 'pop-top-left',
-              duration: 80,
-              timingFunction: 'ease',
-            }}
-            value={form.values.lokasi}
-            onChange={(value) => form.setFieldValue('lokasi', value)}
-            error={form.errors.lokasi}
-            required
-          />
-          <DatePickerInput
-            label='Tanggal Pemotretan'
-            placeholder='Pilih Tanggal'
-            type='range'
-            radius='md'
-            rightSection={<BsChevronDown size='1rem' />}
-            rightSectionWidth={30}
-            // value={date}
-            // onChange={setDate}
-            closeOnChange={false}
-            // @ts-ignore
-            styles={dropdownStyle}
-            minDate={currentDate}
-            // value={form.values.tanggal}
-            value={date}
-            // onChange={(value) => form.setFieldValue('tanggal', value)}
-            onChange={setDate}
-            // error={form.errors.tanggal}
-            required
-          />
+          <div className='flex flex-col gap-4'>
+            <div className='text-left font-medium text-2xl'>
+              Titik Lokasi Pemotretan
+            </div>
+            <div className='font-medium text-sm'>{form.values.lokasi}</div>
+          </div>
+          <div className='flex flex-col gap-4'>
+            <div className='text-left font-medium text-2xl'>
+              Tanggal Pemotretan
+            </div>
+            <div className='font-medium text-sm'>
+              {formatTimestamp(form.values.tanggal[0])} -
+              {formatTimestamp(form.values.tanggal[1])}
+            </div>
+          </div>
           <Select
             label='Metode Pembayaran'
             placeholder='Pilih Pembayaran'
@@ -217,33 +166,42 @@ export const FirstStep = ({ form, selected, handler }) => {
             maxDropdownHeight={400}
             rightSection={<BsChevronDown size='1rem' />}
             rightSectionWidth={30}
-            // @ts-ignore
             styles={dropdownStyle}
             transitionProps={{
               transition: 'pop-top-left',
               duration: 80,
               timingFunction: 'ease',
             }}
-            value={form.values.metode}
-            onChange={(value) => form.setFieldValue('metode', value)}
-            error={form.errors.metode}
+            value={form.values.metodePelunasan}
+            onChange={(value) => form.setFieldValue('metodePelunasan', value)}
+            error={form.errors.metodePelunasan}
             required
           />
         </div>
         <div className='flex flex-col gap-8'>
-          <div className='h-28 px-6 flex justify-center items-center text-xl font-medium text-left border-2 rounded-xl'>
-            Note : Pembayaran Dp 50% dari total harga per kategori foto
-          </div>
           <div className='grid grid-cols-2 grid-rows-2 gap-4'>
-            <div className='text-left font-medium text-2xl'>Kategori Foto</div>
-            <div className='text-right font-medium text-sm capitalize'>
+            <div className='text-left font-medium text-2xl flex items-center justify-start'>Kategori Foto</div>
+            <div className='text-right font-medium text-sm flex items-center justify-end capitalize'>
               {form.values.kategori}
             </div>
-            <div className='text-left font-medium text-2xl'>
+            <div className='text-left font-medium text-2xl flex items-center justify-start'>
               Total Pemesanan
             </div>
-            <div className='text-right font-medium text-sm'>
+            <div className='text-right font-medium text-sm flex items-center justify-end'>
               Rp. {form.values.price}.000
+            </div>
+            <div className='text-left font-medium text-2xl flex items-center justify-start'>Biaya Tambahan</div>
+            <div className='text-right font-medium text-sm flex items-center justify-end'>
+              Rp.{' '}
+              {form.values.biayaTambahan.replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
+            </div>
+            <div className='text-left font-medium text-2xl flex items-center justify-start'>Catatan</div>
+            <div className='text-right font-medium text-sm flex items-center justify-end capitalize'>
+              {form.values.note}
+            </div>
+            <div className='text-left font-medium text-2xl flex items-center justify-start'>Total</div>
+            <div className='text-right font-medium text-sm flex items-center justify-end'>
+              {(parseInt(form.values.price) * 1000 + parseInt(form.values.biayaTambahan)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}
             </div>
           </div>
           <div className='w-full h-0 border-2 border-black bg-black' />

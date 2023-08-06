@@ -7,7 +7,7 @@ import GoogleLogo from '../assets/google-logo.svg'
 import FacebookLogo from '../assets/facebook-logo.svg'
 // @ts-ignore
 import HorizontalLine from '../assets/line.svg'
-import { Notification } from '@mantine/core'
+import { Image, Notification } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import {
   getAdditionalUserInfo,
@@ -162,7 +162,7 @@ export const SignIn = () => {
                 className='object-cover'
                 src={FacebookLogo}
               />
-              <span>Sign in with Facebook</span>
+              <span className='text-sm'>Sign in with Facebook</span>
             </button>
           </div>
           <div className='flex flex-row gap-6'>
