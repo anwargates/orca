@@ -48,7 +48,7 @@ export const PaymentProofModal = ({ url, urlPelunasan }) => {
     <>
       <div
         onClick={showModal}
-        className='bg-primary px-6 text-center w-32 h-8 text-xs text-white rounded-md flex justify-center items-center hover:cursor-pointer m-auto'>
+        className='bg-primary px-6 py-2 text-center w-32 h-auto text-xs text-white rounded-md flex justify-center items-center hover:cursor-pointer m-auto'>
         Lihat Bukti Pembayaran
       </div>
     </>

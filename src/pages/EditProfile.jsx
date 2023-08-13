@@ -233,11 +233,16 @@ export const EditProfile = () => {
                   htmlFor='nomorWA'>
                   Nomor Whatsapp
                 </label>
-                <input
-                  className='w-full h-10 border rounded-lg border-black p-2'
-                  type='number'
-                  {...register('nomorWA', {})}
-                />
+                <div className='relative w-full h-10 border rounded-lg border-black'>
+                  <div className='absolute top-1/2 left-1 -translate-y-1/2'>
+                    +62
+                  </div>
+                  <input
+                  className='w-full h-full border-none rounded-lg pl-10 p-2 '
+                    type='number'
+                    {...register('nomorWA', {})}
+                  />
+                </div>
               </div>
               <div className='flex justify-start gap-5 flex-wrap'>
                 <Radio

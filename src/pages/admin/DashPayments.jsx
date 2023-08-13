@@ -54,7 +54,9 @@ const columns = [
     title: 'Biaya Tambahan',
     dataIndex: 'biayaTambahan',
     key: 'biayaTambahan',
-    render: (text) => <div>{text?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</div>,
+    render: (text) => (
+      <div>{text?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')}</div>
+    ),
   },
   {
     title: 'Pembayaran Pelunasan',
@@ -68,9 +70,7 @@ const columns = [
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    render: (text) => (
-      <div>{text}</div>
-    ),
+    render: (text) => <div>{text}</div>,
   },
   {
     title: 'Detail Pesanan',
@@ -108,13 +108,14 @@ const columns = [
           onClick={() => {
             const linkGrupWhatsapp =
               'https%3A%2F%2Fchat.whatsapp.com%2FIFSL0IwH7MfE5RkRfQPGo0'
-            const encodedMessage = `Haii%2C%20${record.userName}%21%0A%0ABerikut%20invoice%20dari%20berlangganan%20kelas%20${record.kategori}%20di%20Kursus%20Editing%20Ruang%20Edit%20dengan%20nomor%20transaksi%20${record.uid}%0A%0AUntuk%20info%20kelas%20lebih%20lengkap%2C%20silahkan%20bergabung%20ke%20grup%20komunitas%20Ruang%20Edit%20%3A%20%0A${linkGrupWhatsapp}%0A%0ATerimakasih%21
+            const encodedMessage = `Hai%2C%20${
+              record.userName
+            }%21%20Berikut%20invoice%20dari%20pemesanan%20${record.kategori.toUpperCase()}%20dengan%20nomor%20transaksi%20${
+              record.uid
+            }%20Untuk%20info%20lebih%20lanjut%20silahkan%20balas%20pesan%20ini
             `
-            // window.open(
-            //   `https://api.whatsapp.com/send?phone=${item.nomorTelepon}&text=${encodedMessage}`
-            // )
             window.open(
-              `https://api.whatsapp.com/send?phone=6285892716319&text=${encodedMessage}`
+              `https://api.whatsapp.com/send?phone=62${record.telepon}&text=${encodedMessage}`
             )
           }}
           className='hover:cursor-pointer rounded-full'>

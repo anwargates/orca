@@ -11,6 +11,7 @@ import { auth, database, db, storage } from '../../config/firebase'
 import categoryList from '../../data/categoryList'
 import { dataPayment } from '../../data/paymentMethods'
 import { push, set, ref as dbRef } from 'firebase/database'
+import { useStore } from '../../global/store'
 
 export const SecondStep = ({ form, selected, handler }) => {
   moment().locale('id')
@@ -18,6 +19,7 @@ export const SecondStep = ({ form, selected, handler }) => {
   const [nextStep, prevStep] = handler
   const [pending, setPending] = useState(false)
   const [file, setFile] = useState(null)
+  const {userData} = useStore()
 
   const handleNext = () => {
     const validate = form.validate()
@@ -69,6 +71,7 @@ export const SecondStep = ({ form, selected, handler }) => {
       bukti: url,
       status: 'Pembayaran DP',
       timestamp: serverTimestamp(),
+      telepon: userData.phoneNumber,
     })
       .then((res) => {
         console.log('create doc success', res)

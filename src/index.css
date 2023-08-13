@@ -90,7 +90,7 @@
   }
 
   .socmed-button {
-    @apply flex flex-row h-16 p-4 text-black rounded-lg items-center justify-center text-center border border-solid border-grey bg-white;
+    @apply flex flex-row h-16 p-2 text-xs text-black rounded-lg items-center justify-center text-center border border-solid border-grey bg-white;
   }
 
   .header-link-button {

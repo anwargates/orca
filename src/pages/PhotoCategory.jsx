@@ -13,7 +13,7 @@ export const PhotoCategory = () => {
           </div>
         </div>
         <div className='container max-w-7xl mx-auto px-2 py-8 md:px-16'>
-          <div className='grid md:grid-cols-2 grid-rows-3 gap-10 mt-10'>
+          <div className='grid md:grid-cols-2 gap-10 mt-10'>
             {data.map(({ title, pict, link }, index) => (
               <Card
                 key={index}
@@ -39,16 +39,16 @@ const settings = {
   arrows: false,
   autoplay: true,
   lazyLoad: true,
-  // responsive: [
-  //   {
-  //     breakpoint: 768,
-  //     settings: {},
-  //   },
-  // ],
+  responsive: [
+    {
+      breakpoint: 768,
+      settings: {},
+    },
+  ],
 }
 
 const Card = ({ title, link }) => (
-  <div className='bg-white shadow-lg rounded-2xl px-8 lg:px-16 py-8 gap-6'>
+  <div className='grid md:block bg-white shadow-lg rounded-2xl px-8 lg:px-16 py-8 gap-6'>
     <h2 className='w-full text-3xl my-4 text-primary font-bold text-left truncate'>
       {title}
     </h2>

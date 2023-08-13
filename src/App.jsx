@@ -28,7 +28,7 @@ import { PaymentPelunasan } from './pages/PaymentPelunasan'
 function App() {
   const pending = useStore((state) => state.authRefreshing)
   const setPending = useStore((state) => state.setAuthRefreshing)
-  const { isLoggedIn, isAdmin, setAdmin, actionLoading } = useStore()
+  const { isLoggedIn, isAdmin, setAdmin, actionLoading, setUserData } = useStore()
 
   useEffect(() => {
     console.log(auth)
@@ -44,6 +44,7 @@ function App() {
             if (docSnap.exists()) {
               console.log(docSnap.data())
               setAdmin(docSnap.data().isAdmin)
+              setUserData(docSnap.data())
               console.log(isAdmin)
             }
           })

@@ -162,7 +162,7 @@ export const SignIn = () => {
                 className='object-cover'
                 src={FacebookLogo}
               />
-              <span className='text-sm'>Sign in with Facebook</span>
+              <span>Sign in with Facebook</span>
             </button>
           </div>
           <div className='flex flex-row gap-6'>
